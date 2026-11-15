@@ -71,11 +71,13 @@ and in the notes; keep the front page to the few things worth stopping for.
 
 ## After you push: the cache
 
-GitHub Pages serves every file with `cache-control: max-age=600`, so a browser that has already
-seen the site keeps the old CSS and JS for ten minutes even once the new HTML arrives — the page
-renders unstyled or half-styled and looks broken.
+GitHub Pages serves every file with `cache-control: max-age=600`. Both your browser *and* GitHub's
+CDN keep each URL for ten minutes, so after a push an already-visited page can keep showing the old
+version — or worse, new HTML with old CSS, which renders half-styled and looks broken. A new tab
+does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
+different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=2`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=3`. **Bump that
 number in every HTML file whenever you change CSS or JS.** New URL, no stale cache, no waiting.
 
 (A hard reload — ⌘⇧R — fixes it for you, but not for anyone else visiting.)

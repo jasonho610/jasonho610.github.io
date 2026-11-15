@@ -133,7 +133,6 @@ section:last-of-type { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
   border: 1px solid var(--line); border-radius: 999px;
   padding: 0.6rem 1.15rem; cursor: pointer; min-width: 13rem;
   display: inline-flex; align-items: center; gap: 0.6rem;
-  backdrop-filter: blur(8px);
   transition: border-color .2s ease, color .2s ease;
 }
 .listen:hover { border-color: var(--band-2); }

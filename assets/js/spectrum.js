@@ -157,6 +157,7 @@
 
   /* ── draw ──────────────────────────────────────────────────── */
   var born = performance.now();
+  var onScreen = true, ticking = false;
 
   function level(node) {
     node.analyser.getByteFrequencyData(node.data);
@@ -226,9 +227,28 @@
       ctx.globalAlpha = 1;
     });
 
+    schedule();
+  }
+
+  function schedule() {
+    if (!onScreen && !playing) { ticking = false; return; }
+    ticking = true;
     requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
+  function wake() { if (!ticking) schedule(); }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      onScreen = entries[0].isIntersecting;
+      wake();
+    }, { rootMargin: '120px' }).observe(canvas);
+  }
+  document.addEventListener('visibilitychange', function () {
+    onScreen = onScreen && !document.hidden;
+    if (!document.hidden) wake();
+  });
+
+  schedule();
 })();
 
 /* ── rail: mark the section you are reading ─────────────────────── */

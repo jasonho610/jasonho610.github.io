@@ -42,9 +42,5 @@ window.EVENTS = [
     venue: 'Blue Note Taipei', video: 'WqYekGSZDcw',
     note: 'Guitar, piano, bass and drums — Joshua Redman, Herbie Hancock, and a few other corners of jazz, fusion and pop.',
     links: [{ label: 'The announcement', url: 'https://www.instagram.com/p/DY9JhUQASs3/' }]
-  },
-  {
-    date: '2025-07-27', kind: 'gig', title: 'Khalil Fong — “Paris” solo',
-    venue: 'RevNow, Taipei', video: 'CZSFgW2ZZ3w', note: 'A solo chorus, with 子彰.'
   }
 ];

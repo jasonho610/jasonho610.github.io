@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kuan-Hsun (Jason) Ho</title>
+<meta name="description" content="Kuan-Hsun (Jason) Ho — audio DSP and machine learning in Taipei, and a tenor saxophone most weekends.">
+<meta property="og:title" content="Kuan-Hsun (Jason) Ho">
+<meta property="og:description" content="Audio DSP and machine learning, with the ear of a working jazz musician.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jasonho610.github.io/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🎷</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<nav class="rail" data-nav aria-label="Sections">
+  <a href="#top"     style="--tick:var(--band-1)"><span class="rail-label">top</span></a>
+  <a href="#about"   style="--tick:var(--band-2)"><span class="rail-label">about</span></a>
+  <a href="#work"    style="--tick:var(--band-4)"><span class="rail-label">work</span></a>
+  <a href="#notes"   style="--tick:var(--band-6)"><span class="rail-label">notes</span></a>
+  <a href="#contact" style="--tick:var(--band-1)"><span class="rail-label">contact</span></a>
+</nav>
+
+<div class="page">
+<nav class="topbar" data-nav aria-label="Sections">
+  <a href="#about">about</a>
+  <a href="#work">work</a>
+  <a href="#notes">notes</a>
+  <a href="#contact">contact</a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <h1 class="hero-name">
+      <span class="given">Kuan-Hsun</span>
+      <span class="family">Jason Ho</span>
+    </h1>
+    <p class="hero-line">What does a model actually listen to?</p>
+    <p class="hero-sub">Audio DSP and machine listening. Tenor saxophone. Taipei.</p>
+
+    <div class="hero-controls">
+      <button class="listen" type="button" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span><span class="label">hear the filterbank</span>
+      </button>
+      <span class="hero-hint">six bandpass filters, an octave apart — run your cursor across them</span>
+    </div>
+  </div>
+
+  <div class="hero-canvas-wrap">
+    <canvas id="spectrum" aria-hidden="true"></canvas>
+  </div>
+</header>
+
+<main>
+
+<section id="about" class="wrap">
+  <div class="about-grid">
+  <p class="statement">I am an audio engineer and a jazz saxophonist, and I have never managed to keep the two apart.</p>
+  <div class="statement-body">
+    <p>On a bandstand you learn to hear one voice inside an arrangement and decide, in about half a second, whether it is working. That habit is what I bring to signal processing and machine learning — and it is why the question above keeps pulling me back. A loss value tells you whether a model worked. It does not tell you what the model used, or whether its judgment is one a musician would recognise.</p>
+    <p>So I build things that have to answer to an ear: effects that ship inside instruments people play, and models that can say which part of a sound they are responding to. Next I want to do that full time, as a PhD in music information retrieval.</p>
+  </div>
+  </div>
+</section>
+
+<section id="work" class="wrap">
+  <div class="strands">
+    <article style="--tone:var(--band-6)">
+      <h2>Listening</h2>
+      <p>I research machine listening for music and speech. Lately that means a critic you can ask, in plain language, what is wrong with a vocal mix. Before that, a few years teaching speech models to show which frequency bands they actually rely on — published at ICASSP, Interspeech, MLSP and SLT.</p>
+    </article>
+    <article style="--tone:var(--band-4)">
+      <h2>Building</h2>
+      <p>Two years writing the real-time DSP inside guitar software and smart amps at Positive Grid: effects, neural amp models squeezed onto microcontrollers, and a great deal of replaying the same four bars until they sounded right. Shipping teaches what papers cannot — a real-time thread has no patience.</p>
+    </article>
+    <article style="--tone:var(--band-1)">
+      <h2>Playing</h2>
+      <p>Lead tenor in a Taipei big band, a regular at Blue Note Taipei, and a solo on a record nominated for Best Jazz Album at the Golden Indie Music Awards. The playing is not a hobby sitting beside the work. It is where the questions come from.</p>
+    </article>
+  </div>
+
+  <div class="picks">
+    <h3>If you only open one thing</h3>
+    <ul>
+      <li>
+        <a href="https://arxiv.org/abs/2610.30783"><strong>MixJudge</strong></a>
+        <span>A critic that can be asked, in words, what a vocal mix needs — and rank how badly it needs it.</span>
+      </li>
+      <li>
+        <a href="https://doi.org/10.1109/ICASSP48485.2024.10445878"><strong>What Do Neural Networks Listen To?</strong></a>
+        <span>Rebuilding a speech model so its frequency selectivity is something you can simply read off. ICASSP 2024.</span>
+      </li>
+      <li>
+        <a href="https://github.com/jasonho610/ITU-R_BS.1770-4_cpp"><strong>A loudness meter</strong></a>
+        <span>Open-source LKFS and true-peak metering in modern C++, written to the ITU-R standard.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="gigs">
+    <h3>On stage</h3>
+    <ol>
+      <li class="is-next">
+        <span class="when"><i class="cue" aria-hidden="true"></i><time datetime="2026-11-29">29 Nov</time><em>2026</em></span>
+        <div>
+          <h4>Tenor Showdown! — JHQ ft. Iming Lin</h4>
+          <p>Two tenors on one bandstand, through soul jazz, bebop and hard bop. With Iming Lin on tenor, Yu Chen Wu on piano, Chiala Lee on bass and Chi-lung Hsieh on drums.</p>
+          <p class="where"><a href="https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-ri-te-yan-h">Blue Note Taipei</a> · <a href="https://www.instagram.com/p/DfryUjmgV6E/">the announcement</a></p>
+        </div>
+      </li>
+      <li>
+        <span class="when"><time datetime="2026-05">May</time><em>2026</em></span>
+        <div>
+          <h4>Jason Ho Quintet</h4>
+          <p>A quintet night with guitar, piano, bass and drums — Joshua Redman, Herbie Hancock, and a few other corners of jazz, fusion and pop.</p>
+          <p class="where"><a href="https://www.instagram.com/p/DY9JhUQASs3/">Blue Note Taipei</a></p>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+</section>
+
+<section id="notes" class="wrap">
+  <div class="section-head">
+    <h2>Notes</h2>
+    <p class="section-note">Occasional writing on DSP, machine listening, and what I hear in between.</p>
+  </div>
+  <ul class="note-list">
+    <li>
+      <a href="notes/filterbank-on-the-front-page.html">
+        <h3>The filterbank on the front page</h3>
+        <time datetime="2026-11-15">15 November 2026</time>
+        <p>What the six curves at the top of this site are, why they are spaced an octave apart, and what any of it has to do with a paper about speech enhancement.</p>
+      </a>
+    </li>
+  </ul>
+</section>
+
+<section id="contact" class="wrap">
+  <div class="section-head"><h2>Say hello</h2></div>
+  <a class="big-mail" href="mailto:jasonho610@gmail.com">jasonho610@gmail.com</a>
+
+  <div class="contact-grid">
+    <div>
+      <h3>Elsewhere</h3>
+      <a href="https://github.com/jasonho610">GitHub</a>
+      <a href="https://www.linkedin.com/in/kuan-hsun-ho">LinkedIn</a>
+    </div>
+    <div>
+      <h3>The long version</h3>
+      <p class="plain">Academic CV and industry résumé on request — email me and I will send both.</p>
+    </div>
+    <div>
+      <h3>Based in</h3>
+      <p class="plain">Taipei, Taiwan — and wherever the next band is.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>Built by hand. The hero is a real six-band filterbank, the same idea as the Sinc-convolution encoder in the ICASSP paper — drawn here instead of trained.</p>
+  </footer>
+</section>
+
+</main>
+</div>
+
+<script src="assets/js/spectrum.js"></script>
+</body>
+</html>

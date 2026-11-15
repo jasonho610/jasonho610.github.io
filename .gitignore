@@ -1,0 +1,5 @@
+# CVs stay off the public repo — they carry a phone number.
+# They live in assets/cv/ locally; the site offers them by email instead.
+assets/cv/*.pdf
+
+.DS_Store

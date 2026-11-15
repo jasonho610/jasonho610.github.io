@@ -176,34 +176,15 @@ section:last-of-type { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
 
 .plain { font-size: 0.95rem; color: var(--dim); margin: 0; }
 
-/* ─── gigs ───────────────────────────────────────────────────── */
-.gigs { margin-top: clamp(3rem, 7vw, 5rem); }
-.gigs h3 { font-family: var(--display); font-size: 0.92rem; font-weight: 600; color: var(--faint); margin: 0 0 1rem; }
-.gigs ol { list-style: none; margin: 0; padding: 0; }
-.gigs li {
-  display: grid; grid-template-columns: 19rem minmax(0, 1fr); gap: 0.4rem 2rem;
-  padding: 1.5rem 0; border-top: 1px solid var(--line);
-}
-.gigs .when {
-  font-family: var(--display); font-weight: 700; letter-spacing: -0.02em;
-  font-size: 1.5rem; color: var(--dim);
-  display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: nowrap;
-}
-.gigs .when em { font-style: normal; font-size: 0.95rem; font-weight: 600; color: var(--faint); }
-.gigs h4 { font-family: var(--display); font-weight: 700; font-size: 1.12rem; margin: 0 0 0.4rem; line-height: 1.2; }
-.gigs p { color: var(--dim); font-size: 0.98rem; margin-bottom: 0.4rem; max-width: 54ch; }
-.gigs .where { font-family: var(--display); font-size: 0.88rem; font-weight: 600; color: var(--faint); margin-bottom: 0; }
-.gigs .where a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
-.gigs .where a:hover { color: var(--light); border-bottom-color: var(--band-1); }
-
-/* the next one up gets the stage light */
-.gigs .is-next .when { color: var(--band-1); }
-.gigs .cue {
-  flex: none; width: 0.5rem; height: 0.5rem; border-radius: 50%;
-  background: var(--band-1); align-self: center;
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--band-1) 20%, transparent);
-}
-.gigs .is-next h4 { color: #fff; }
+/* ─── on stage (front page) — rendered from the same data as the calendar ─ */
+.onstage { margin-top: clamp(3rem, 7vw, 5rem); }
+.onstage .next-label { display: none; }   /* the block is already labelled "On stage" */
+.onstage .next { padding-top: 1.3rem; }
+.onstage h3,
+.picks h3 { font-family: var(--display); font-size: 0.92rem; font-weight: 600; color: var(--faint); margin: 0 0 1rem; }
+.onstage .more { margin-top: 1.4rem; font-family: var(--display); font-size: 0.88rem; font-weight: 600; }
+.onstage .more a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
+.onstage .more a:hover { color: var(--light); border-bottom-color: var(--band-1); }
 
 /* ─── notes ───────────────────────────────────────────────────── */
 .note-list { list-style: none; margin: 0; padding: 0; }
@@ -233,7 +214,7 @@ footer p { max-width: none; }
 
 /* ─── article pages ───────────────────────────────────────────── */
 .article { max-width: 68ch; padding-block: clamp(4rem, 9vw, 7rem); }
-.article h1 { font-size: clamp(2rem, 5vw, 3.4rem); margin-bottom: 0.8rem; }
+.article h1 { font-size: clamp(2.1rem, 4.6vw, 3.4rem); margin-bottom: 0.8rem; }
 .article .dateline { color: var(--faint); font-style: italic; margin-bottom: 2.5rem; }
 .article h2 { font-size: 1.5rem; margin: 2.6rem 0 0.9rem; }
 .article p, .article li { color: var(--dim); }
@@ -261,8 +242,6 @@ footer p { max-width: none; }
   .about-grid { grid-template-columns: 1fr; }
   .strands { grid-template-columns: 1fr; gap: 2rem; }
   .picks li { grid-template-columns: 1fr; }
-  .gigs li { grid-template-columns: 1fr; gap: 0.6rem; }
-  .gigs .when { font-size: 1.25rem; }
 }
 
 /* ─── calendar ────────────────────────────────────────────────── */
@@ -277,7 +256,7 @@ footer p { max-width: none; }
 
 .cal { padding-block: clamp(3rem, 7vw, 5.5rem) clamp(4rem, 9vw, 7rem); }
 .cal-head { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
-.cal-head h1 { font-size: clamp(2.6rem, 8vw, 5.5rem); margin-bottom: 0.4rem; }
+.page-title { font-size: clamp(2.1rem, 4.6vw, 3.4rem); margin-bottom: 0.4rem; }
 
 /* the next one up */
 .next {
@@ -323,14 +302,15 @@ footer p { max-width: none; }
 
 .entries { list-style: none; margin: 1.2rem 0 0; padding: 0; }
 .entry {
-  display: grid; grid-template-columns: 5.5rem minmax(0, 1fr);
-  gap: 0.3rem 1.8rem; padding: 1.4rem 0; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 19rem minmax(0, 1fr);
+  gap: 0.4rem 2rem; padding: 1.5rem 0; border-top: 1px solid var(--line);
 }
-.entry-when { display: flex; flex-direction: column; line-height: 1.15; }
-.entry-when .day { font-family: var(--display); font-weight: 700; font-size: 1.75rem; color: var(--tone); letter-spacing: -0.03em; }
-.entry-when .mon { font-family: var(--display); font-weight: 600; font-size: 0.92rem; color: var(--dim); }
-.entry-when .mon.wide { font-size: 1.2rem; color: var(--tone); }
-.entry-when .wd { font-size: 0.78rem; color: var(--faint); font-style: italic; margin-top: 0.15rem; }
+.entry-when { display: flex; flex-direction: column; line-height: 1.2; }
+.entry-when .date {
+  font-family: var(--display); font-weight: 700; font-size: 1.5rem;
+  color: var(--tone); letter-spacing: -0.02em;
+}
+.entry-when .meta { font-size: 0.82rem; color: var(--faint); font-style: italic; margin-top: 0.2rem; }
 .entry-body h3 { font-size: 1.15rem; margin-bottom: 0.25rem; }
 .entry-body .venue { color: var(--dim); font-size: 0.98rem; margin-bottom: 0.3rem; }
 .entry-body .note { color: var(--faint); font-size: 0.95rem; max-width: 56ch; }
@@ -340,7 +320,9 @@ footer p { max-width: none; }
 .entry.is-tbc .entry-body h3 { color: var(--dim); }
 
 @media (max-width: 900px) {
-  .entry { grid-template-columns: 4.2rem minmax(0, 1fr); gap: 0.3rem 1.1rem; }
+  .entry { grid-template-columns: 1fr; gap: 0.4rem; }
+  .entry-when { flex-direction: row; align-items: baseline; gap: 0.6rem; }
+  .entry-when .meta { margin-top: 0; }
   .axis { grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.6rem; }
   .axis-month-label { display: none; }
 }

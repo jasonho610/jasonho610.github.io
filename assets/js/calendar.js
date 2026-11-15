@@ -56,12 +56,11 @@
     var when = el('div', 'entry-when');
     var p = e.parsed;
     if (p.d !== null) {
-      when.appendChild(el('span', 'day', String(p.d)));
-      when.appendChild(el('span', 'mon', SHORT[p.m]));
-      when.appendChild(el('span', 'wd', DAYS[e.when.getDay()].slice(0, 3)));
+      when.appendChild(el('span', 'date', p.d + ' ' + SHORT[p.m]));
+      when.appendChild(el('span', 'meta', DAYS[e.when.getDay()] + ' · ' + p.y));
     } else {
-      when.appendChild(el('span', 'mon wide', dateLabel(e)));
-      if (e.tbc) when.appendChild(el('span', 'wd', 'to confirm'));
+      when.appendChild(el('span', 'date', dateLabel(e)));
+      when.appendChild(el('span', 'meta', e.tbc ? 'date to confirm' : ''));
     }
     li.appendChild(when);
 

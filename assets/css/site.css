@@ -265,3 +265,83 @@ footer p { max-width: none; }
   .gigs li { grid-template-columns: 1fr; gap: 0.6rem; }
   .gigs .when { font-size: 1.25rem; }
 }
+
+/* ─── calendar ────────────────────────────────────────────────── */
+:root {
+  --gig:        var(--band-1);
+  --conference: var(--band-6);
+  --release:    var(--band-4);
+}
+.kind-gig        { --tone: var(--gig); }
+.kind-conference { --tone: var(--conference); }
+.kind-release    { --tone: var(--release); }
+
+.cal { padding-block: clamp(3rem, 7vw, 5.5rem) clamp(4rem, 9vw, 7rem); }
+.cal-head { margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+.cal-head h1 { font-size: clamp(2.6rem, 8vw, 5.5rem); margin-bottom: 0.4rem; }
+
+/* the next one up */
+.next {
+  border-top: 2px solid var(--tone);
+  padding: 1.6rem 0 2rem;
+  max-width: 54ch;
+}
+.next-label { font-family: var(--display); font-size: 0.85rem; font-weight: 600; color: var(--tone); margin-bottom: 0.9rem; }
+.next-date { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.7rem; }
+.next-date .d { font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 9vw, 5.5rem); line-height: 0.9; letter-spacing: -0.04em; }
+.next-date .m { font-family: var(--display); font-weight: 600; font-size: clamp(1.1rem, 2.4vw, 1.6rem); color: var(--dim); }
+.next h2 { font-size: clamp(1.35rem, 2.6vw, 1.9rem); margin-bottom: 0.35rem; }
+.next .venue { color: var(--dim); margin-bottom: 0.5rem; }
+.next .note { color: var(--faint); font-size: 0.98rem; }
+
+/* a year drawn as an axis, like the frequency axis on the front page */
+.axes-block { margin: clamp(3rem, 7vw, 5rem) 0; }
+.axis { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
+.axis-year { font-family: var(--display); font-weight: 700; font-size: 1rem; color: var(--dim); }
+.axis-track { position: relative; height: 3rem; border-bottom: 1px solid var(--line); }
+.axis-month { position: absolute; bottom: 0; width: 1px; height: 0.45rem; background: var(--line); }
+.axis-month-label { position: absolute; top: 0.7rem; left: 0; font-size: 0.68rem; color: var(--faint); font-style: italic; }
+.mark {
+  position: absolute; bottom: -0.3rem; width: 0.62rem; height: 0.62rem;
+  margin-left: -0.31rem; border-radius: 50%;
+  background: color-mix(in oklab, var(--tone) 55%, var(--stage));
+  border: 1px solid var(--tone);
+  transition: transform .18s ease, background .18s ease;
+}
+.mark:hover, .mark:focus-visible { transform: scale(1.5); background: var(--tone); z-index: 2; }
+.mark.is-ahead { background: var(--tone); box-shadow: 0 0 0 4px color-mix(in oklab, var(--tone) 22%, transparent); }
+.axis-now { position: absolute; bottom: -0.2rem; top: 0; width: 1px; margin-left: -0.5px; background: var(--light); opacity: .45; }
+
+.legend { display: flex; gap: 1.3rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--faint); font-style: italic; margin-top: 1.4rem; }
+.legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
+.legend i { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--tone); }
+.legend-now i { width: 1px; height: 0.8rem; border-radius: 0; background: var(--light); opacity: .6; }
+
+/* the lists */
+.cal-list { margin-top: clamp(3rem, 7vw, 4.5rem); }
+.cal-list h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); margin-bottom: 0.5rem; }
+.cal-list .section-note { display: block; margin-bottom: 1.5rem; }
+
+.entries { list-style: none; margin: 1.2rem 0 0; padding: 0; }
+.entry {
+  display: grid; grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.3rem 1.8rem; padding: 1.4rem 0; border-top: 1px solid var(--line);
+}
+.entry-when { display: flex; flex-direction: column; line-height: 1.15; }
+.entry-when .day { font-family: var(--display); font-weight: 700; font-size: 1.75rem; color: var(--tone); letter-spacing: -0.03em; }
+.entry-when .mon { font-family: var(--display); font-weight: 600; font-size: 0.92rem; color: var(--dim); }
+.entry-when .mon.wide { font-size: 1.2rem; color: var(--tone); }
+.entry-when .wd { font-size: 0.78rem; color: var(--faint); font-style: italic; margin-top: 0.15rem; }
+.entry-body h3 { font-size: 1.15rem; margin-bottom: 0.25rem; }
+.entry-body .venue { color: var(--dim); font-size: 0.98rem; margin-bottom: 0.3rem; }
+.entry-body .note { color: var(--faint); font-size: 0.95rem; max-width: 56ch; }
+.entry-links { display: flex; flex-wrap: wrap; gap: 0 1.1rem; margin-top: 0.5rem; font-family: var(--display); font-size: 0.85rem; font-weight: 600; }
+.entry-links a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
+.entry-links a:hover { color: var(--light); border-bottom-color: var(--tone); }
+.entry.is-tbc .entry-body h3 { color: var(--dim); }
+
+@media (max-width: 900px) {
+  .entry { grid-template-columns: 4.2rem minmax(0, 1fr); gap: 0.3rem 1.1rem; }
+  .axis { grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.6rem; }
+  .axis-month-label { display: none; }
+}

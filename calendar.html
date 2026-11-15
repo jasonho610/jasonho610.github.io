@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar — Kuan-Hsun (Jason) Ho</title>
+<meta name="description" content="Where Jason Ho is playing, and where he will be — gigs, conferences and dates worth knowing.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🎷</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<div class="page" style="margin-left:0">
+<section class="wrap cal">
+  <a class="back" href="index.html">← Kuan-Hsun (Jason) Ho</a>
+
+  <div class="cal-head">
+    <h1>Calendar</h1>
+    <p class="section-note">Where I am playing, and where I will be.</p>
+  </div>
+
+  <div id="next-up"></div>
+
+  <div class="axes-block">
+    <div id="axes"></div>
+    <p class="legend">
+      <span class="kind-gig"><i></i>gigs</span>
+      <span class="kind-conference"><i></i>conferences</span>
+      <span class="kind-release"><i></i>releases</span>
+      <span class="legend-now"><i></i>today</span>
+    </p>
+  </div>
+
+  <div class="cal-list">
+    <h2>Ahead</h2>
+    <div id="upcoming"></div>
+  </div>
+
+  <div class="cal-list">
+    <h2>Played</h2>
+    <p class="section-note">Most Blue Note sets are recorded — the full night is behind “watch the set”.</p>
+    <div id="past"></div>
+  </div>
+
+  <noscript><p class="empty">The calendar needs JavaScript to draw itself. The dates also live, plainly, in <a href="assets/js/events.js">events.js</a>.</p></noscript>
+</section>
+</div>
+
+<script src="assets/js/events.js"></script>
+<script src="assets/js/calendar.js"></script>
+</body>
+</html>

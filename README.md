@@ -9,6 +9,9 @@ straight from the repository root (`.nojekyll` tells Pages not to run Jekyll ove
 
 ```
 index.html                 the front page — hero, about, work, notes, contact
+calendar.html              gigs, conferences and other dates
+assets/js/events.js        THE calendar data — the only file to edit when a date changes
+assets/js/calendar.js      draws the year axis and the lists from events.js
 notes.html                 index of notes
 notes/*.html               one file per note
 assets/css/site.css        every style on the site
@@ -43,8 +46,19 @@ To change the bands, edit the `BANDS` array at the top of `assets/js/spectrum.js
 - **The CVs are not in the repo.** `.gitignore` keeps `assets/cv/*.pdf` out of git, so the site
   says "on request" rather than linking them. To publish them instead, drop the ignore rule and
   put the two links back in the contact section.
-- **Keep the gig list current.** `On stage` in `index.html` lists the two Blue Note dates. Move the
-  `is-next` class to whichever gig is still ahead, and drop it entirely once nothing is upcoming.
+- **Keep the calendar current.** Everything lives in `assets/js/events.js` — add an object, reload.
+  The front page still hard-codes the next gig under `On stage`; update that one line when the
+  Tenor Showdown passes, or point it at whatever is next.
+
+## Adding a date
+
+Open `assets/js/events.js` and add an entry — the file's header documents every field. Dates can be
+`"2027-03-14"`, `"2027-03"` or `"2027"`, so something pencilled in for next year is still allowed on
+the page; add `tbc: true` and it is labelled "to confirm". `kind` is `gig`, `conference` or
+`release`, which sets the colour on the year axis. A past set with a recording gets
+`video: "<youtube id>"` and the entry grows a "watch the set" link.
+
+Past and upcoming are split automatically against today's date — nothing to move by hand.
 
 ## Adding a note
 

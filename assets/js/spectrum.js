@@ -159,6 +159,23 @@
   var born = performance.now();
   var onScreen = true, ticking = false;
 
+  /* when the background music is playing, read the real spectrum around each
+     band centre instead of synthesising movement */
+  var musicBins = null;
+  function musicLevel(b) {
+    var amb = window.__ambience;
+    if (!amb || !amb.playing()) return null;
+    var an = amb.analyser;
+    if (!musicBins || musicBins.length !== an.frequencyBinCount) musicBins = new Uint8Array(an.frequencyBinCount);
+    an.getByteFrequencyData(musicBins);
+    var nyquist = amb.ctx.sampleRate / 2;
+    var lo = Math.max(0, Math.floor(b.f / Math.SQRT2 / nyquist * musicBins.length));
+    var hi = Math.min(musicBins.length - 1, Math.ceil(b.f * Math.SQRT2 / nyquist * musicBins.length));
+    var peak = 0;
+    for (var i = lo; i <= hi; i++) if (musicBins[i] > peak) peak = musicBins[i];
+    return peak / 255;
+  }
+
   function level(node) {
     node.analyser.getByteFrequencyData(node.data);
     var peak = 0;
@@ -189,8 +206,11 @@
     var hoverF = pointerX === null ? null : fOf(Math.max(0, Math.min(W, pointerX)));
 
     BANDS.forEach(function (b, i) {
+      var music = musicLevel(b);
       if (playing && audio) {
         b.target = 0.14 + level(audio.chain[i]) * 0.95;
+      } else if (music !== null) {
+        b.target = 0.12 + music * 1.0;
       } else if (reduced) {
         b.target = 0.36;
       } else {
@@ -201,7 +221,7 @@
       }
       /* jitter at birth, resolving into clean bands */
       var jitter = (1 - settle) * (Math.random() * 0.5 - 0.1);
-      b.amp += ((b.target + jitter) * settle - b.amp) * (playing ? 0.35 : 0.07);
+      b.amp += ((b.target + jitter) * settle - b.amp) * (playing || music !== null ? 0.3 : 0.07);
 
       var h = Math.max(0, b.amp) * (baseline * 0.86);
       ctx.beginPath();
@@ -243,6 +263,7 @@
       wake();
     }, { rootMargin: '120px' }).observe(canvas);
   }
+  document.addEventListener('ambience', function () { wake(); });
   document.addEventListener('visibilitychange', function () {
     onScreen = onScreen && !document.hidden;
     if (!document.hidden) wake();

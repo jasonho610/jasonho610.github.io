@@ -12,6 +12,8 @@ index.html                 the front page — hero, about, work, on stage, liste
 calendar.html              gigs, conferences and other dates
 assets/js/events.js        THE calendar data — the only file to edit when a date changes
 assets/js/calendar.js      draws the year axis and the lists from events.js
+assets/js/ambience.js      the opt-in background music player
+assets/audio/              the music files — see the README in that folder
 assets/css/site.css        every style on the site
 assets/js/spectrum.js      the hero filterbank, rail highlighting, click-to-load video
 assets/img/*.jpg           the one photograph on the site, behind the next date up
@@ -67,6 +69,15 @@ page works out the next three dates itself. A night that was filmed in full take
 
 Past and upcoming are split automatically against today's date — nothing to move by hand.
 
+## Background music
+
+A small control sits in the bottom-left corner. It starts **paused** every time: browsers refuse to
+autoplay sound without a gesture, and unannounced audio on someone else's site is hostile. While it
+plays, the hero filterbank follows the music instead of its own idle motion.
+
+The audio files are not in the repo — see `assets/audio/README.md` for which two to download and
+what to name them. With the files missing the control hides itself, so nothing looks broken.
+
 ## After you push: the cache
 
 GitHub Pages serves every file with `cache-control: max-age=600`. Both your browser *and* GitHub's
@@ -75,7 +86,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=11`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=12`. **Bump that
 number in every HTML file whenever you change CSS or JS.**
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules

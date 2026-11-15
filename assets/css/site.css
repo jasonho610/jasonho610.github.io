@@ -207,6 +207,7 @@ section:last-of-type { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
 
 footer { padding: 2.5rem 0 0; border-top: 1px solid var(--line); color: var(--faint); font-size: 0.85rem; }
 footer p { max-width: none; }
+footer .credit { margin-bottom: 0.8rem; }
 
 /* ─── responsive ──────────────────────────────────────────────── */
 @media (max-width: 900px) {
@@ -354,3 +355,29 @@ footer p { max-width: none; }
   .axis { min-width: 29rem; }
   .axis-month-label { font-size: 0.6rem; }
 }
+
+/* ─── background music (opt-in) ───────────────────────────────── */
+.ambience {
+  position: fixed; left: 0; bottom: 0; z-index: 50;
+  width: var(--rail); padding: 0 0 1.1rem 1.1rem;
+  display: flex; flex-direction: column; gap: 0.45rem;
+}
+.ambience[hidden] { display: none; }
+.ambience-toggle {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--display); font-size: 0.72rem; font-weight: 600;
+  color: var(--faint); text-align: left;
+}
+.ambience-toggle:hover { color: var(--light); }
+.ambience-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 0.7rem; }
+.ambience-bars i { width: 2px; height: 35%; background: currentColor; }
+.ambience.is-playing .ambience-toggle { color: var(--band-1); }
+.ambience.is-playing .ambience-bars i { animation: bars 900ms ease-in-out infinite; }
+.ambience.is-playing .ambience-bars i:nth-child(2) { animation-delay: 150ms; }
+.ambience.is-playing .ambience-bars i:nth-child(3) { animation-delay: 300ms; }
+@keyframes bars { 0%, 100% { height: 30%; } 50% { height: 100%; } }
+@media (prefers-reduced-motion: reduce) { .ambience-bars i { animation: none !important; } }
+.ambience-now { margin: 0; font-size: 0.68rem; line-height: 1.3; color: var(--faint); font-style: italic; max-width: 100%; }
+.ambience.is-playing .ambience-now { color: var(--dim); }
+.ambience-now a { color: inherit; text-decoration-color: color-mix(in oklab, var(--band-2) 50%, transparent); }

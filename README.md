@@ -8,7 +8,8 @@ straight from the repository root (`.nojekyll` tells Pages not to run Jekyll ove
 ## Files
 
 ```
-index.html                 the front page — hero, about, work, on stage, listen, contact
+index.html                 the front page — intro, about, work, on stage, listen, contact
+cv.html                    the full CV
 calendar.html              gigs, conferences and other dates
 assets/js/events.js        THE calendar data — the only file to edit when a date changes
 assets/js/calendar.js      draws the year axis and the lists from events.js
@@ -71,9 +72,10 @@ Past and upcoming are split automatically against today's date — nothing to mo
 
 ## Background music
 
-A small control sits in the bottom-left corner. It starts **paused** every time: browsers refuse to
-autoplay sound without a gesture, and unannounced audio on someone else's site is hostile. While it
-plays, the hero filterbank follows the music instead of its own idle motion.
+A small control sits in the bottom-left corner. The page tries to start the music on arrival, but
+browsers block audible autoplay until a visitor has interacted with the site, so on a first visit the
+button is what actually starts it. There is no way around that from a web page — it is a browser
+policy, not a setting. While music plays, the curves at the top of the page follow it.
 
 The audio files are not in the repo — see `assets/audio/README.md` for which two to download and
 what to name them. With the files missing the control hides itself, so nothing looks broken.
@@ -86,7 +88,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=13`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=14`. **Bump that
 number in every HTML file whenever you change CSS or JS.**
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules

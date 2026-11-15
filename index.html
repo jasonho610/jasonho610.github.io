@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=13">
+<link rel="stylesheet" href="assets/css/site.css?v=14">
 </head>
 <body>
 
@@ -22,6 +22,7 @@
   <a href="#about"   style="--tick:var(--band-2)"><span class="rail-label">about</span></a>
   <a href="#work"    style="--tick:var(--band-4)"><span class="rail-label">work</span></a>
   <a href="calendar.html" style="--tick:var(--band-6)"><span class="rail-label">calendar</span></a>
+  <a href="cv.html" style="--tick:var(--band-3)"><span class="rail-label">cv</span></a>
   <a href="#contact" style="--tick:var(--band-1)"><span class="rail-label">contact</span></a>
 </nav>
 
@@ -31,6 +32,7 @@
   <a href="#about">about</a>
   <a href="#work">work</a>
   <a href="calendar.html">calendar</a>
+  <a href="cv.html">cv</a>
   <a href="#contact">contact</a>
 </nav>
 
@@ -45,9 +47,8 @@
 
     <div class="hero-controls">
       <button class="listen" type="button" aria-pressed="false">
-        <span class="dot" aria-hidden="true"></span><span class="label">hear the filterbank</span>
+        <span class="dot" aria-hidden="true"></span><span class="label">play a sound</span>
       </button>
-      <span class="hero-hint">six bandpass filters, an octave apart — run your cursor across them</span>
     </div>
   </div>
 
@@ -136,7 +137,8 @@
     </div>
     <div>
       <h3>The long version</h3>
-      <p class="plain">Academic CV and industry résumé on request — email me and I will send both.</p>
+      <a href="cv.html">Full CV</a>
+      <p class="plain" style="margin-top:0.5rem">PDFs of the academic CV and industry résumé on request.</p>
     </div>
     <div>
       <h3>Based in</h3>
@@ -146,16 +148,15 @@
 
   <footer>
     <p class="credit">Background music, when you ask for it: <a href="https://freemusicarchive.org/music/alex-morgan/moods-atmospheres-vol-4/hard-bop-rainy-night-bright-late-session/">“Hard Bop Rainy Night”</a> by Alex Morgan and <a href="https://freemusicarchive.org/music/nokings-xxx/too-cool-for-school/too-cool-for-school/">“Too Cool for School”</a> by NoKings XXX, both <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> via the Free Music Archive.</p>
-    <p>Built by hand. The hero is a real six-band filterbank, the same idea as the Sinc-convolution encoder in the ICASSP paper — drawn here instead of trained.</p>
   </footer>
 </section>
 
 </main>
 </div>
 
-<script src="assets/js/spectrum.js?v=13"></script>
-<script src="assets/js/events.js?v=13"></script>
-<script src="assets/js/calendar.js?v=13"></script>
-<script src="assets/js/ambience.js?v=13"></script>
+<script src="assets/js/spectrum.js?v=14"></script>
+<script src="assets/js/events.js?v=14"></script>
+<script src="assets/js/calendar.js?v=14"></script>
+<script src="assets/js/ambience.js?v=14"></script>
 </body>
 </html>

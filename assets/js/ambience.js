@@ -32,7 +32,7 @@
   box.innerHTML =
     '<button type="button" class="ambience-toggle" aria-pressed="false">' +
       '<span class="ambience-bars" aria-hidden="true"><i></i><i></i><i></i></span>' +
-      '<span class="ambience-label">play music</span>' +
+      '<span class="ambience-label">play</span>' +
     '</button>' +
     '<p class="ambience-now"></p>';
   document.body.appendChild(box);
@@ -91,7 +91,7 @@
       started = true;
       box.classList.add('is-playing');
       toggle.setAttribute('aria-pressed', 'true');
-      label.textContent = 'pause music';
+      label.textContent = 'pause';
       describe();
       try { localStorage.setItem(KEY, 'on'); } catch (e) {}
     }).catch(stop);
@@ -102,7 +102,7 @@
     if (audio) audio.pause();
     box.classList.remove('is-playing');
     toggle.setAttribute('aria-pressed', 'false');
-    label.textContent = 'play music';
+    label.textContent = 'play';
     try { localStorage.setItem(KEY, 'off'); } catch (e) {}
   }
 
@@ -115,8 +115,10 @@
     describe();
     /* a returning visitor who switched it on still has to click once —
        browsers do not accept a stored preference as a gesture */
-    try {
-      if (localStorage.getItem(KEY) === 'on') label.textContent = 'resume music';
-    } catch (e) {}
+    /* Try to start on arrival. Browsers block audible autoplay until the visitor
+       has interacted with the site, so this usually fails on a first visit and
+       the button is what actually starts it. Chrome does allow it once a
+       visitor has played audio here often enough. */
+    play();
   }).catch(function () { /* no files, no control */ });
 })();

@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=14">
+<link rel="stylesheet" href="assets/css/site.css?v=15">
 </head>
 <body>
 
@@ -22,7 +22,6 @@
   <a href="#about"   style="--tick:var(--band-2)"><span class="rail-label">about</span></a>
   <a href="#work"    style="--tick:var(--band-4)"><span class="rail-label">work</span></a>
   <a href="calendar.html" style="--tick:var(--band-6)"><span class="rail-label">calendar</span></a>
-  <a href="cv.html" style="--tick:var(--band-3)"><span class="rail-label">cv</span></a>
   <a href="#contact" style="--tick:var(--band-1)"><span class="rail-label">contact</span></a>
 </nav>
 
@@ -32,7 +31,6 @@
   <a href="#about">about</a>
   <a href="#work">work</a>
   <a href="calendar.html">calendar</a>
-  <a href="cv.html">cv</a>
   <a href="#contact">contact</a>
 </nav>
 
@@ -42,7 +40,7 @@
       <span class="given">Kuan-Hsun</span>
       <span class="family">Jason Ho</span>
     </h1>
-    <p class="hero-line">What does a model actually listen to?</p>
+    <p class="hero-line">What musicians know about sound can teach audio models.</p>
     <p class="hero-sub">Audio DSP and ML. Jazz Saxophonist.</p>
 
     <div class="hero-controls">
@@ -61,10 +59,11 @@
 
 <section id="about" class="wrap">
   <div class="about-grid">
-  <p class="statement">I am an audio engineer and a jazz saxophonist, and I have never managed to keep the two apart.</p>
+  <p class="statement">I work on audio machine learning and signal processing, and I play tenor saxophone.</p>
   <div class="statement-body">
-    <p>On a bandstand you learn to hear one voice inside an arrangement and decide, in about half a second, whether it is working. That habit is what I bring to signal processing and machine learning — and it is why the question above keeps pulling me back. A loss value tells you whether a model worked. It does not tell you what the model used, or whether its judgment is one a musician would recognise.</p>
-    <p>So I build things that have to answer to an ear: effects that ship inside instruments people play, and models that can say which part of a sound they are responding to. Next I want to do that full time, as a PhD in music information retrieval.</p>
+    <p>The two keep meeting. Musicians spend years learning which differences in sound matter — which take is better, which frequency is fighting the vocal. I want audio models to learn the same things, and I want to be able to check whether they really did.</p>
+    <p>I started with DSP: a loudness meter in C++ at NTPU. Then speech enhancement for my master’s at NTNU, two years writing real-time effects at Positive Grid, and now MixJudge, a model you can ask in plain words what a vocal mix needs.</p>
+    <p>I am applying for PhD study in music technology, starting autumn 2027.</p>
   </div>
   </div>
 </section>
@@ -72,25 +71,25 @@
 <section id="work" class="wrap">
   <div class="strands">
     <article style="--tone:var(--band-6)">
-      <h2>Listening</h2>
-      <p>I research machine listening for music and speech. Lately that means a critic you can ask, in plain language, what is wrong with a vocal mix. Before that, a few years teaching speech models to show which frequency bands they actually rely on — published at ICASSP, Interspeech, MLSP and SLT.</p>
+      <h2>Building</h2>
+      <p>Teaching models musical ideas. MixJudge learns eleven things that commonly go wrong in a vocal mix, so you can ask it what a mix needs and it can rank how badly it needs it.</p>
     </article>
     <article style="--tone:var(--band-4)">
-      <h2>Building</h2>
-      <p>Two years writing the real-time DSP inside guitar software and smart amps at Positive Grid: effects, neural amp models squeezed onto microcontrollers, and a great deal of replaying the same four bars until they sounded right. Shipping teaches what papers cannot — a real-time thread has no patience.</p>
+      <h2>Understanding</h2>
+      <p>Checking what a model actually uses. I rebuilt a speech model so you can simply read off which frequency bands it leans on, instead of guessing from a score.</p>
     </article>
     <article style="--tone:var(--band-1)">
-      <h2>Playing</h2>
-      <p>Lead tenor in a Taipei big band, a regular at Blue Note Taipei, and a solo on a record nominated for Best Jazz Album at the Golden Indie Music Awards. The playing is not a hobby sitting beside the work. It is where the questions come from.</p>
+      <h2>Playing along</h2>
+      <p>The long-term goal: an accompanist that listens. One that keeps the groove, follows the energy, leaves space, and answers a phrase when answering is the right call.</p>
     </article>
   </div>
 
   <div class="picks">
-    <h3>If you only open one thing</h3>
+    <h3>Worth a look</h3>
     <ul>
       <li>
         <a href="https://arxiv.org/abs/2610.30783"><strong>MixJudge</strong></a>
-        <span>A critic that can be asked, in words, what a vocal mix needs — and rank how badly it needs it.</span>
+        <span>Ask it, in plain words, what is wrong with a vocal mix.</span>
       </li>
       <li>
         <a href="https://doi.org/10.1109/ICASSP48485.2024.10445878"><strong>What Do Neural Networks Listen To?</strong></a>
@@ -98,9 +97,44 @@
       </li>
       <li>
         <a href="https://github.com/jasonho610/ITU-R_BS.1770-4_cpp"><strong>A loudness meter</strong></a>
-        <span>Open-source LKFS and true-peak metering in modern C++, written to the ITU-R standard.</span>
+        <span>Loudness and true-peak metering in C++, written to the ITU-R standard.</span>
       </li>
     </ul>
+  </div>
+
+  <div class="experience">
+    <h3>Experience</h3>
+    <ul>
+      <li>
+        <span class="exp-when">2024 – 2026</span>
+        <div>
+          <h4>DSP Engineer, Positive Grid</h4>
+          <p>Real-time audio for guitar software and smart amps. Over forty effects for BIAS X, neural amp models squeezed onto a microcontroller, and tone embeddings that let presets move between platforms.</p>
+        </div>
+      </li>
+      <li>
+        <span class="exp-when">2025 – now</span>
+        <div>
+          <h4>Independent research, with Prof. Yi-Hsuan Yang at NTU</h4>
+          <p>MixJudge: a model that judges vocal mixes against a problem you describe in words. Submitted to ICASSP 2027.</p>
+        </div>
+      </li>
+      <li>
+        <span class="exp-when">2021 – 2023</span>
+        <div>
+          <h4>M.S. research, with Prof. Berlin Chen at NTNU</h4>
+          <p>Speech enhancement and noise-robust recognition, plus a collaboration with Realtek on detecting the wearer’s own voice. Five papers at ICASSP, Interspeech, MLSP and SLT.</p>
+        </div>
+      </li>
+      <li>
+        <span class="exp-when">Education</span>
+        <div>
+          <h4>M.S. Computer Science, NTNU · B.S. Computer Science, NTPU</h4>
+          <p>Master’s 2021–2023, thesis on compatibility and interpretability in speech enhancement. Bachelor’s 2017–2021; the capstone project became patent TWI821594B.</p>
+        </div>
+      </li>
+    </ul>
+    <p class="more"><a href="assets/cv/Ho_Kuan-Hsun_academic_CV.pdf">Academic CV (PDF)</a> · <a href="assets/cv/Ho_Kuan-Hsun_resume.pdf">Industry résumé (PDF)</a></p>
   </div>
 
   <div class="onstage">
@@ -136,13 +170,13 @@
       <a href="https://www.youtube.com/@jasonho610">YouTube</a>
     </div>
     <div>
-      <h3>The long version</h3>
-      <a href="cv.html">Full CV</a>
-      <p class="plain" style="margin-top:0.5rem">PDFs of the academic CV and industry résumé on request.</p>
+      <h3>CV</h3>
+      <a href="assets/cv/Ho_Kuan-Hsun_academic_CV.pdf">Academic CV (PDF)</a>
+      <a href="assets/cv/Ho_Kuan-Hsun_resume.pdf">Industry résumé (PDF)</a>
     </div>
     <div>
-      <h3>Based in</h3>
-      <p class="plain">Taipei, Taiwan — and wherever the next band is.</p>
+      <h3>Where</h3>
+      <p class="plain">Taipei, Taiwan. Applying for PhD study in music technology, autumn 2027.</p>
     </div>
   </div>
 
@@ -154,9 +188,9 @@
 </main>
 </div>
 
-<script src="assets/js/spectrum.js?v=14"></script>
-<script src="assets/js/events.js?v=14"></script>
-<script src="assets/js/calendar.js?v=14"></script>
-<script src="assets/js/ambience.js?v=14"></script>
+<script src="assets/js/spectrum.js?v=15"></script>
+<script src="assets/js/events.js?v=15"></script>
+<script src="assets/js/calendar.js?v=15"></script>
+<script src="assets/js/ambience.js?v=15"></script>
 </body>
 </html>

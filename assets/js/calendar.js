@@ -175,7 +175,7 @@
       }
       nextHost.appendChild(card);
     } else {
-      nextHost.appendChild(el('p', 'empty', 'Nothing booked at the moment. The next one goes up here as soon as it is.'));
+      nextHost.appendChild(el('p', 'empty', 'Nothing booked right now. The next date appears here as soon as there is one.'));
     }
   }
 
@@ -226,6 +226,6 @@
 
   function idOf(e) { return 'e-' + e.date + '-' + e.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
 
-  list('upcoming', upcoming, 'Nothing on the books yet.');
+  list('upcoming', upcoming, 'Nothing coming up yet.');
   list('past', past, 'Nothing here yet.');
 })();

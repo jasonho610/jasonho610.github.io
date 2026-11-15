@@ -20,14 +20,14 @@ window.EVENTS = [
   {
     date: '2027', kind: 'conference', tbc: true,
     title: 'ICASSP 2027',
-    note: 'If MixJudge is accepted — dates and city to confirm.'
+    note: 'If MixJudge is accepted. Dates and city still to confirm.'
   },
   {
     repeat: 'first-saturday', kind: 'gig',
     title: 'Sing Sang Sung with ETO',
     venue: 'Blue Note Taipei',
     venueUrl: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-shou-zhou-zhou-liu-te-yan-xiao-jiu-guan-li-de-da-le-tuan-8',
-    note: 'A big band in a small bar — three hours with the ETO Jazz Big Band, full-band arrangements alternating with combo sets. Doors at 8, music at 9.'
+    note: 'A big band in a small bar. Three hours with the ETO Jazz Big Band, swapping between full band and smaller combos. Doors at 8, music at 9.'
   },
   {
     date: '2026-11-29', kind: 'gig',
@@ -35,7 +35,7 @@ window.EVENTS = [
     venue: 'Blue Note Taipei',
     venueUrl: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-ri-te-yan-h',
     poster: 'https://static.wixstatic.com/media/973c52_084a51377f1f4368855c8c8325b4f866~mv2.png/v1/fill/w_900,h_900,al_c/973c52_084a51377f1f4368855c8c8325b4f866~mv2.png',
-    note: 'Two tenors on one bandstand, through soul jazz, bebop and hard bop. With Iming Lin, Yu Chen Wu, Chiala Lee and Chi-lung Hsieh.',
+    note: 'Two tenor saxophones on one stage — soul jazz, bebop and hard bop. With Iming Lin, Yu Chen Wu, Chiala Lee and Chi-lung Hsieh.',
     links: [
       { label: 'Blue Note Taipei', url: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-ri-te-yan-h' },
       { label: 'The announcement', url: 'https://www.instagram.com/p/DfryUjmgV6E/' }
@@ -45,12 +45,12 @@ window.EVENTS = [
   {
     date: '2026-10-03', kind: 'gig', title: 'Sing Sang Sung with ETO',
     venue: 'Blue Note Taipei', venueUrl: BLUE_NOTE, playlist: 'PLVws2-tNAatw',
-    note: 'The October residency — Donna Lee, El Gatote, Widow’s Walk, and an hour of combo.'
+    note: 'The October night — Donna Lee, El Gatote, Widow’s Walk, and an hour of combo.'
   },
   {
     date: '2026-05-29', kind: 'gig', title: 'ETO Combo — Blue Note special',
     venue: 'Blue Note Taipei', venueUrl: BLUE_NOTE, playlist: 'PLP_iwARvvcYTnZO8C8EyrD6c4dl4TNW9b',
-    note: 'Two combos across the night, Joy Spring twice over.'
+    note: 'Two combos across the night, and Joy Spring twice.'
   },
 
   { date: '2026-10-16', kind: 'gig', title: 'Jazz Meta Band',     venue: 'Blue Note Taipei', venueUrl: BLUE_NOTE, video: '7jYHTUNpsXY' },
@@ -66,7 +66,7 @@ window.EVENTS = [
   {
     date: '2026-06-10', kind: 'gig', title: 'Jason Ho Quintet',
     venue: 'Blue Note Taipei', venueUrl: BLUE_NOTE, video: 'WqYekGSZDcw',
-    note: 'Guitar, piano, bass and drums — Joshua Redman, Herbie Hancock, and a few other corners of jazz, fusion and pop.',
+    note: 'Guitar, piano, bass and drums. Joshua Redman, Herbie Hancock, and a few other corners of jazz, fusion and pop.',
     links: [{ label: 'The announcement', url: 'https://www.instagram.com/p/DY9JhUQASs3/' }]
   }
 ];

@@ -8,8 +8,7 @@ straight from the repository root (`.nojekyll` tells Pages not to run Jekyll ove
 ## Files
 
 ```
-index.html                 the front page — intro, about, work, on stage, listen, contact
-cv.html                    the full CV
+index.html                 the front page — intro, about, work, experience, on stage, listen, contact
 calendar.html              gigs, conferences and other dates
 assets/js/events.js        THE calendar data — the only file to edit when a date changes
 assets/js/calendar.js      draws the year axis and the lists from events.js
@@ -18,7 +17,7 @@ assets/audio/              the music files — see the README in that folder
 assets/css/site.css        every style on the site
 assets/js/spectrum.js      the hero filterbank, rail highlighting, click-to-load video
 assets/img/*.jpg           the one photograph on the site, behind the next date up
-assets/cv/*.pdf            the two CVs — kept local, git-ignored (they carry a phone number)
+assets/cv/*.pdf            the two CVs, offered as downloads from the page
 ```
 
 ## Running it locally
@@ -45,9 +44,9 @@ To change the bands, edit the `BANDS` array at the top of `assets/js/spectrum.js
 - **A photo**, if you want one — drop it in `assets/img/` and place it in the hero or beside the statement.
 - **Audio examples** — before/after clips of an effect, or MixJudge examples, would carry more
   than any amount of prose. `<audio controls src="assets/audio/…">` is enough.
-- **The CVs are not in the repo.** `.gitignore` keeps `assets/cv/*.pdf` out of git, so the site
-  says "on request" rather than linking them. To publish them instead, drop the ignore rule and
-  put the two links back in the contact section.
+- **The CVs are published.** `assets/cv/*.pdf` are committed and linked from the Experience block
+  and the contact section. Both PDFs contain a phone number — replace them with redacted copies if
+  that is not wanted.
 - **Keep the calendar current.** Everything lives in `assets/js/events.js` — add an object, reload.
   The front page still hard-codes the next gig under `On stage`; update that one line when the
   Tenor Showdown passes, or point it at whatever is next.
@@ -88,7 +87,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=14`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=15`. **Bump that
 number in every HTML file whenever you change CSS or JS.**
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules

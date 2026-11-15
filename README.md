@@ -69,6 +69,17 @@ The seed note is yours to edit or delete.
 The site is deliberately short — an introduction, not a CV. The detail belongs in the two PDFs
 and in the notes; keep the front page to the few things worth stopping for.
 
+## After you push: the cache
+
+GitHub Pages serves every file with `cache-control: max-age=600`, so a browser that has already
+seen the site keeps the old CSS and JS for ten minutes even once the new HTML arrives — the page
+renders unstyled or half-styled and looks broken.
+
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=2`. **Bump that
+number in every HTML file whenever you change CSS or JS.** New URL, no stale cache, no waiting.
+
+(A hard reload — ⌘⇧R — fixes it for you, but not for anyone else visiting.)
+
 ## Publishing
 
 Push to `main`. GitHub Pages serves `https://jasonho610.github.io` from the repository root —

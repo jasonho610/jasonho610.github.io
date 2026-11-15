@@ -16,6 +16,7 @@ notes.html                 index of notes
 notes/*.html               one file per note
 assets/css/site.css        every style on the site
 assets/js/spectrum.js      the hero filterbank, rail highlighting, click-to-load video
+assets/img/*.jpg           the one photograph on the site, behind the next date up
 assets/cv/*.pdf            the two CVs — kept local, git-ignored (they carry a phone number)
 ```
 
@@ -52,6 +53,10 @@ To change the bands, edit the `BANDS` array at the top of `assets/js/spectrum.js
 
 ## Adding a date
 
+The colours come from a photograph of a Blue Note set — fairy-light amber, brick red, and the blue
+of the neon sign on warm black. `:root` in `site.css` holds the whole palette; the six band colours
+are a warm-to-cool ramp used by the hero filterbank, the strand rules, and the calendar.
+
 Open `assets/js/events.js` and add an entry — the file's header documents every field. Dates can be
 `"2027-03-14"`, `"2027-03"` or `"2027"`, so something pencilled in for next year is still allowed on
 the page; add `tbc: true` and it is labelled "to confirm". `kind` is `gig`, `conference` or
@@ -77,7 +82,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=3`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=6`. **Bump that
 number in every HTML file whenever you change CSS or JS.** New URL, no stale cache, no waiting.
 
 (A hard reload — ⌘⇧R — fixes it for you, but not for anyone else visiting.)

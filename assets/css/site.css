@@ -2,22 +2,24 @@
    Concept: the page is a spectrum. Colour encodes frequency band and topic. */
 
 :root {
-  --stage:        #130B22;
-  --stage-lift:   #1B1033;
-  --stage-deep:   #0B0617;
-  --line:         #2E1F4A;
+  /* Taken off the bandstand at Blue Note Taipei: warm black, fairy-light amber,
+     brick red, and the blue of the neon sign. */
+  --stage:        #15100E;
+  --stage-lift:   #201917;
+  --stage-deep:   #0C0908;
+  --line:         #352925;
 
-  --light:        #EDE7F6;
-  --dim:          #A99BC9;
-  --faint:        #7A6D97;
+  --light:        #F4EADB;
+  --dim:          #BCA893;
+  --faint:        #8B7563;
 
-  /* band colours — a spectrogram ramp, low to high */
-  --band-1: #FF8A3D;   /* brass   — music, mixing, MIR */
-  --band-2: #F5407F;   /* magenta — interaction, links */
-  --band-3: #C14FE8;
-  --band-4: #9B6BFF;   /* violet  — systems, embedded, real-time */
-  --band-5: #5AA8FF;
-  --band-6: #39D9E0;   /* cyan    — speech, ASR, VAD */
+  /* the spectrum ramp, warm to cool, the way the room is lit */
+  --band-1: #F4B23F;   /* fairy lights  — music, mixing, gigs */
+  --band-2: #E8763A;   /* warm orange   — links and accents */
+  --band-3: #C8453C;   /* brick red     — releases */
+  --band-4: #A3466F;   /* stage wash    — systems, embedded */
+  --band-5: #3F6FC4;
+  --band-6: #4FBCE4;   /* neon sign     — speech, conferences */
 
   --music:   var(--band-1);
   --systems: var(--band-4);
@@ -260,10 +262,24 @@ footer p { max-width: none; }
 
 /* the next one up */
 .next {
+  position: relative;
+  border: 1px solid var(--line);
   border-top: 2px solid var(--tone);
-  padding: 1.6rem 0 2rem;
-  max-width: 54ch;
+  padding: 1.7rem clamp(1.3rem, 3vw, 2.4rem) 2rem;
+  min-height: 19rem;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  background-image:
+    linear-gradient(97deg,
+      var(--stage) 0%,
+      color-mix(in oklab, var(--stage) 94%, transparent) 30%,
+      color-mix(in oklab, var(--stage) 72%, transparent) 58%,
+      color-mix(in oklab, var(--stage) 28%, transparent) 86%,
+      color-mix(in oklab, var(--stage) 55%, transparent) 100%),
+    url("../img/blue-note-stage.jpg");
+  background-size: cover;
+  background-position: 56% 26%;
 }
+.next > * { max-width: 44ch; position: relative; text-shadow: 0 1px 14px color-mix(in oklab, var(--stage-deep) 85%, transparent); }
 .next-label { font-family: var(--display); font-size: 0.85rem; font-weight: 600; color: var(--tone); margin-bottom: 0.9rem; }
 .next-date { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.7rem; }
 .next-date .d { font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 9vw, 5.5rem); line-height: 0.9; letter-spacing: -0.04em; }
@@ -311,6 +327,11 @@ footer p { max-width: none; }
   color: var(--tone); letter-spacing: -0.02em;
 }
 .entry-when .meta { font-size: 0.82rem; color: var(--faint); font-style: italic; margin-top: 0.2rem; }
+.poster { display: block; margin-top: 0.9rem; max-width: 9.5rem; }
+.poster img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+.poster:hover img { border-color: var(--tone); }
+.entry-body .venue a { color: inherit; text-decoration-color: color-mix(in oklab, var(--band-2) 60%, transparent); }
+.entry-body .venue a:hover { color: var(--light); }
 .entry-body h3 { font-size: 1.15rem; margin-bottom: 0.25rem; }
 .entry-body .venue { color: var(--dim); font-size: 0.98rem; margin-bottom: 0.3rem; }
 .entry-body .note { color: var(--faint); font-size: 0.95rem; max-width: 56ch; }

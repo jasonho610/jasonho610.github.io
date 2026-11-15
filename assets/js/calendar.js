@@ -64,9 +64,20 @@
     }
     li.appendChild(when);
 
+    if (e.poster) {
+      var pa = el('a', 'poster');
+      pa.href = e.venueUrl || e.poster;
+      var pi = document.createElement('img');
+      pi.src = e.poster;
+      pi.alt = 'Poster for ' + e.title;
+      pi.loading = 'lazy';
+      pa.appendChild(pi);
+      when.appendChild(pa);
+    }
+
     var body = el('div', 'entry-body');
     body.appendChild(el('h3', null, e.title));
-    if (e.venue) body.appendChild(el('p', 'venue', e.venue));
+    if (e.venue) body.appendChild(venueLine(e));
     if (e.note) body.appendChild(el('p', 'note', e.note));
 
     if (e.video || (e.links && e.links.length)) {
@@ -85,6 +96,18 @@
     }
     li.appendChild(body);
     return li;
+  }
+
+  function venueLine(e) {
+    var p = el('p', 'venue');
+    if (e.venueUrl) {
+      var a = el('a', null, e.venue);
+      a.href = e.venueUrl;
+      p.appendChild(a);
+    } else {
+      p.textContent = e.venue;
+    }
+    return p;
   }
 
   function list(into, items, emptyText) {
@@ -108,7 +131,7 @@
       big.appendChild(el('span', 'm', next.parsed.m !== null ? MONTHS[next.parsed.m] : String(next.parsed.y)));
       card.appendChild(big);
       card.appendChild(el('h2', null, next.title));
-      if (next.venue) card.appendChild(el('p', 'venue', next.venue));
+      if (next.venue) card.appendChild(venueLine(next));
       if (next.note) card.appendChild(el('p', 'note', next.note));
       if (next.links) {
         var nl = el('p', 'entry-links');

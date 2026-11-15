@@ -13,12 +13,12 @@
 
   var F_MIN = 55, F_MAX = 11000;
   var BANDS = [
-    { f: 110,  q: 3.4, color: '#FF8A3D' },
-    { f: 220,  q: 3.6, color: '#F5407F' },
-    { f: 440,  q: 3.8, color: '#C14FE8' },
-    { f: 880,  q: 4.0, color: '#9B6BFF' },
-    { f: 1760, q: 4.2, color: '#5AA8FF' },
-    { f: 3520, q: 4.4, color: '#39D9E0' }
+    { f: 110,  q: 3.4, color: '#F4B23F' },
+    { f: 220,  q: 3.6, color: '#E8763A' },
+    { f: 440,  q: 3.8, color: '#C8453C' },
+    { f: 880,  q: 4.0, color: '#A3466F' },
+    { f: 1760, q: 4.2, color: '#3F6FC4' },
+    { f: 3520, q: 4.4, color: '#4FBCE4' }
   ];
   var TICKS = [110, 440, 1760, 7040];
 
@@ -178,10 +178,10 @@
     ctx.textAlign = 'center';
     TICKS.forEach(function (f) {
       var x = xOf(f);
-      ctx.strokeStyle = 'rgba(167,155,201,0.13)';
+      ctx.strokeStyle = 'rgba(188,168,147,0.16)';
       ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(x, H - 16); ctx.lineTo(x, H - 10); ctx.stroke();
-      ctx.fillStyle = 'rgba(122,109,151,0.75)';
+      ctx.fillStyle = 'rgba(139,117,99,0.85)';
       ctx.fillText(f >= 1000 ? (f / 1000) + 'k' : f, x, H - 2);
     });
 

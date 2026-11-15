@@ -211,9 +211,6 @@ footer .credit { margin-bottom: 0.8rem; }
 
 /* ─── responsive ──────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .entry { grid-template-columns: 1fr; gap: 0.4rem; }
-  .entry-when { flex-direction: row; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-  .entry-when .meta { margin-top: 0; }
   .rail { display: none; }
   .page { margin-left: 0; }
   .topbar {
@@ -345,6 +342,11 @@ footer .credit { margin-bottom: 0.8rem; }
       url("../img/blue-note-stage.jpg");
   }
   .next > * { max-width: none; }
+
+  /* the calendar row collapses to one column, with the date on one line */
+  .entry { grid-template-columns: 1fr; gap: 0.4rem; }
+  .entry-when { flex-direction: row; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+  .entry-when .meta { margin-top: 0; }
 
   /* flex-basis cannot force a wrap while a max-width clamps the item, so the
      clamp lives on the image instead */

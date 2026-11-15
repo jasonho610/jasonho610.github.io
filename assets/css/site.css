@@ -314,8 +314,8 @@ footer p { max-width: none; }
 }
 .entry-when .meta { font-size: 0.82rem; color: var(--faint); font-style: italic; margin-top: 0.2rem; }
 .entry-when .repeat { color: var(--tone); opacity: 0.85; }
-.poster { display: block; margin-top: 0.9rem; max-width: 9.5rem; }
-.poster img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
+.poster { display: block; margin-top: 0.9rem; }
+.poster img { display: block; width: 100%; max-width: 9.5rem; height: auto; border: 1px solid var(--line); }
 .poster:hover img { border-color: var(--tone); }
 .entry-body .venue a { color: inherit; text-decoration-color: color-mix(in oklab, var(--band-2) 60%, transparent); }
 .entry-body .venue a:hover { color: var(--light); }

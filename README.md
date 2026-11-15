@@ -61,6 +61,10 @@ the page; add `tbc: true` and it is labelled "to confirm". `kind` is `gig`, `con
 `release`, which sets the colour on the year axis. A past set with a recording gets
 `video: "<youtube id>"` and the entry grows a "watch the set" link.
 
+A residency is written once, not twelve times a year: `repeat: "first-saturday"` on an entry and the
+page works out the next three dates itself. A night that was filmed in full takes
+`playlist: "<youtube playlist id>"` instead of `video:`.
+
 Past and upcoming are split automatically against today's date — nothing to move by hand.
 
 ## After you push: the cache
@@ -71,7 +75,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=7`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=9`. **Bump that
 number in every HTML file whenever you change CSS or JS.** New URL, no stale cache, no waiting.
 
 (A hard reload — ⌘⇧R — fixes it for you, but not for anyone else visiting.)

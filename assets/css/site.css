@@ -330,6 +330,7 @@ footer p { max-width: none; }
   color: var(--tone); letter-spacing: -0.02em;
 }
 .entry-when .meta { font-size: 0.82rem; color: var(--faint); font-style: italic; margin-top: 0.2rem; }
+.entry-when .repeat { color: var(--tone); opacity: 0.85; }
 .poster { display: block; margin-top: 0.9rem; max-width: 9.5rem; }
 .poster img { display: block; width: 100%; height: auto; border: 1px solid var(--line); }
 .poster:hover img { border-color: var(--tone); }

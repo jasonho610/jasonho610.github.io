@@ -27,6 +27,35 @@
 
   var today = new Date(); today.setHours(0, 0, 0, 0);
 
+  /* "first-saturday" means a residency: work out the next few dates rather than
+     making someone type them in every month. */
+  function firstSaturday(y, m) {
+    var first = new Date(y, m, 1);
+    return new Date(y, m, 1 + ((6 - first.getDay() + 7) % 7));
+  }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  var AHEAD = 3;
+  var expanded = [];
+  events.forEach(function (e) {
+    if (e.repeat !== 'first-saturday') { expanded.push(e); return; }
+    var cursor = new Date(today.getFullYear(), today.getMonth(), 1), found = 0;
+    while (found < AHEAD) {
+      var d = firstSaturday(cursor.getFullYear(), cursor.getMonth());
+      if (d >= today) {
+        var copy = {};
+        for (var k in e) if (e.hasOwnProperty(k)) copy[k] = e[k];
+        delete copy.repeat;
+        copy.recurring = true;
+        copy.date = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+        expanded.push(copy);
+        found++;
+      }
+      cursor.setMonth(cursor.getMonth() + 1);
+    }
+  });
+  events = expanded;
+
   events.forEach(function (e) { e.parsed = parse(e.date); e.when = toDate(e); });
   events.sort(function (a, b) { return b.when - a.when; });
 
@@ -58,6 +87,7 @@
     if (p.d !== null) {
       when.appendChild(el('span', 'date', p.d + ' ' + SHORT[p.m]));
       when.appendChild(el('span', 'meta', DAYS[e.when.getDay()] + ' · ' + p.y));
+      if (e.recurring) when.appendChild(el('span', 'meta repeat', 'every first Saturday'));
     } else {
       when.appendChild(el('span', 'date', dateLabel(e)));
       when.appendChild(el('span', 'meta', e.tbc ? 'date to confirm' : ''));
@@ -80,12 +110,17 @@
     if (e.venue) body.appendChild(venueLine(e));
     if (e.note) body.appendChild(el('p', 'note', e.note));
 
-    if (e.video || (e.links && e.links.length)) {
+    if (e.video || e.playlist || (e.links && e.links.length)) {
       var links = el('p', 'entry-links');
       if (e.video) {
         var v = el('a', null, 'Watch the set');
         v.href = 'https://www.youtube.com/watch?v=' + e.video;
         links.appendChild(v);
+      }
+      if (e.playlist) {
+        var pl = el('a', null, 'Watch the night');
+        pl.href = 'https://www.youtube.com/playlist?list=' + e.playlist;
+        links.appendChild(pl);
       }
       (e.links || []).forEach(function (l) {
         var a = el('a', null, l.label);

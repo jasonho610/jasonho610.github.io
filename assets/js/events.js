@@ -8,6 +8,8 @@
  *   poster   optional image URL for the gig poster
  *   note     optional one line — guests, subs, programme
  *   video    optional YouTube id, for a set that was recorded
+ *   playlist optional YouTube playlist id, when a whole night was filmed
+ *   repeat   "first-saturday" for a residency — the next few dates are worked out for you
  *   links    optional [{ label, url }]
  *   tbc      true if the date is not confirmed
  */
@@ -21,6 +23,13 @@ window.EVENTS = [
     note: 'If MixJudge is accepted — dates and city to confirm.'
   },
   {
+    repeat: 'first-saturday', kind: 'gig',
+    title: 'Sing Sang Sung with ETO',
+    venue: 'Blue Note Taipei',
+    venueUrl: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-shou-zhou-zhou-liu-te-yan-xiao-jiu-guan-li-de-da-le-tuan-8',
+    note: 'A big band in a small bar — three hours with the ETO Jazz Big Band, full-band arrangements alternating with combo sets. Doors at 8, music at 9.'
+  },
+  {
     date: '2026-11-29', kind: 'gig',
     title: 'Tenor Showdown! — JHQ ft. Iming Lin',
     venue: 'Blue Note Taipei',
@@ -31,6 +40,17 @@ window.EVENTS = [
       { label: 'Blue Note Taipei', url: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-ri-te-yan-h' },
       { label: 'The announcement', url: 'https://www.instagram.com/p/DfryUjmgV6E/' }
     ]
+  },
+
+  {
+    date: '2026-10-03', kind: 'gig', title: 'Sing Sang Sung with ETO',
+    venue: 'Blue Note Taipei', venueUrl: BLUE_NOTE, playlist: 'PLVws2-tNAatw',
+    note: 'The October residency — Donna Lee, El Gatote, Widow’s Walk, and an hour of combo.'
+  },
+  {
+    date: '2026-05-29', kind: 'gig', title: 'ETO Combo — Blue Note special',
+    venue: 'Blue Note Taipei', venueUrl: BLUE_NOTE, playlist: 'PLP_iwARvvcYTnZO8C8EyrD6c4dl4TNW9b',
+    note: 'Two combos across the night, Joy Spring twice over.'
   },
 
   { date: '2026-10-16', kind: 'gig', title: 'Jazz Meta Band',     venue: 'Blue Note Taipei', venueUrl: BLUE_NOTE, video: '7jYHTUNpsXY' },

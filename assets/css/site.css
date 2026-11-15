@@ -210,26 +210,9 @@ footer p { max-width: none; }
 
 /* ─── responsive ──────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  /* the scrim has to follow the layout: on a narrow card the text sits over the
-     whole photo, so darken from the bottom instead of from the left */
-  .next {
-    min-height: 23rem;
-    background-position: 62% 20%;
-    background-image:
-      linear-gradient(to top,
-        var(--stage) 0%,
-        color-mix(in oklab, var(--stage) 93%, transparent) 44%,
-        color-mix(in oklab, var(--stage) 58%, transparent) 70%,
-        color-mix(in oklab, var(--stage) 26%, transparent) 100%),
-      url("../img/blue-note-stage.jpg");
-  }
-  .next > * { max-width: none; }
-
-  /* keep the whole year readable — scroll it rather than drop the months */
-  .axes-block { overflow-x: auto; padding-bottom: 0.5rem; }
-  .axis { min-width: 29rem; }
-  .axis-month-label { font-size: 0.6rem; }
-
+  .entry { grid-template-columns: 1fr; gap: 0.4rem; }
+  .entry-when { flex-direction: row; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+  .entry-when .meta { margin-top: 0; }
   .rail { display: none; }
   .page { margin-left: 0; }
   .topbar {
@@ -292,7 +275,7 @@ footer p { max-width: none; }
 .next .note { color: var(--faint); font-size: 0.98rem; }
 
 /* a year drawn as an axis, like the frequency axis on the front page */
-.axes-block { margin: clamp(3rem, 7vw, 5rem) 0; }
+.axes-block { margin: clamp(3rem, 7vw, 5rem) 0 0; }
 .axis { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
 .axis-year { font-family: var(--display); font-weight: 700; font-size: 1rem; color: var(--dim); }
 .axis-track { position: relative; height: 3rem; border-bottom: 1px solid var(--line); }
@@ -309,7 +292,7 @@ footer p { max-width: none; }
 .mark.is-ahead { background: var(--tone); box-shadow: 0 0 0 4px color-mix(in oklab, var(--tone) 22%, transparent); }
 .axis-now { position: absolute; bottom: -0.2rem; top: 0; width: 1px; margin-left: -0.5px; background: var(--light); opacity: .45; }
 
-.legend { display: flex; gap: 1.3rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--faint); font-style: italic; margin-top: 1.4rem; }
+.legend { display: flex; gap: 1.3rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--faint); font-style: italic; margin: 1.1rem 0 clamp(3rem, 7vw, 5rem); }
 .legend span { display: inline-flex; align-items: center; gap: 0.45rem; }
 .legend i { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--tone); }
 .legend-now i { width: 1px; height: 0.8rem; border-radius: 0; background: var(--light); opacity: .6; }
@@ -344,9 +327,30 @@ footer p { max-width: none; }
 .entry-links a:hover { color: var(--light); border-bottom-color: var(--tone); }
 .entry.is-tbc .entry-body h3 { color: var(--dim); }
 
+/* These override rules defined above them in this file, so the block has to
+   stay last — an identical media query earlier would simply lose. */
 @media (max-width: 900px) {
-  .entry { grid-template-columns: 1fr; gap: 0.4rem; }
-  .entry-when { flex-direction: row; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-  .poster { flex-basis: 100%; margin-top: 0.7rem; }
-  .entry-when .meta { margin-top: 0; }
+  /* the scrim has to follow the layout: on a narrow card the text spans the
+     whole photo, so darken from the bottom rather than from the left */
+  .next {
+    min-height: 23rem;
+    background-position: 62% 18%;
+    background-image:
+      linear-gradient(to top,
+        var(--stage) 0%,
+        color-mix(in oklab, var(--stage) 95%, transparent) 46%,
+        color-mix(in oklab, var(--stage) 62%, transparent) 72%,
+        color-mix(in oklab, var(--stage) 24%, transparent) 100%),
+      url("../img/blue-note-stage.jpg");
+  }
+  .next > * { max-width: none; }
+
+  /* flex-basis cannot force a wrap while a max-width clamps the item, so the
+     clamp lives on the image instead */
+  .poster { flex: 0 0 100%; margin-top: 0.7rem; }
+
+  /* keep the whole year readable — scroll it rather than drop the months */
+  .axes-block { overflow-x: auto; padding-bottom: 0.5rem; }
+  .axis { min-width: 29rem; }
+  .axis-month-label { font-size: 0.6rem; }
 }

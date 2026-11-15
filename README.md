@@ -75,8 +75,12 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=9`. **Bump that
-number in every HTML file whenever you change CSS or JS.** New URL, no stale cache, no waiting.
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=10`. **Bump that
+number in every HTML file whenever you change CSS or JS.**
+
+One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules
+defined above it. Put mobile overrides there, not in the earlier media query — an identical media
+query that appears earlier in the file simply loses the cascade. New URL, no stale cache, no waiting.
 
 (A hard reload — ⌘⇧R — fixes it for you, but not for anyone else visiting.)
 

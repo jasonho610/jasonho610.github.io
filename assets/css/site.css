@@ -97,7 +97,7 @@ section:last-of-type { padding-bottom: clamp(2rem, 4vw, 3rem); }
 
 .section-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.7rem; flex-wrap: wrap; }
 .section-head h2 { font-size: clamp(1.9rem, 4.2vw, 3.1rem); }
-.section-note { font-size: 0.95rem; color: var(--faint); font-style: italic; }
+.section-note { font-size: 0.95rem; color: var(--dim); font-style: italic; }
 
 /* ─── hero ────────────────────────────────────────────────────── */
 .hero {
@@ -141,7 +141,6 @@ section:last-of-type { padding-bottom: clamp(2rem, 4vw, 3rem); }
 .transport.is-playing .dot { background: var(--band-6); animation: pulse 1.1s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .25; } }
 @media (prefers-reduced-motion: reduce) { .transport.is-playing .dot { animation: none; } }
-.hero-hint { font-size: 0.85rem; color: var(--faint); font-style: italic; }
 
 /* ─── the statement ──────────────────────────────────────────── */
 .about-grid {
@@ -278,7 +277,7 @@ footer .credit { margin-bottom: 0.8rem; }
 .next-date .m { font-family: var(--display); font-weight: 600; font-size: clamp(1.1rem, 2.4vw, 1.6rem); color: var(--dim); }
 .next h2 { font-size: clamp(1.35rem, 2.6vw, 1.9rem); margin-bottom: 0.35rem; }
 .next .venue { color: var(--dim); margin-bottom: 0.5rem; }
-.next .note { color: var(--faint); font-size: 0.98rem; }
+.next .note { color: var(--dim); font-size: 0.98rem; }
 
 /* a year drawn as an axis, like the frequency axis on the front page */
 .axes-block { margin: clamp(2rem, 4vw, 3rem) 0 0; }
@@ -327,39 +326,13 @@ footer .credit { margin-bottom: 0.8rem; }
 .entry-body .venue a:hover { color: var(--light); }
 .entry-body h3 { font-size: 1.15rem; margin-bottom: 0.25rem; }
 .entry-body .venue { color: var(--dim); font-size: 0.98rem; margin-bottom: 0.3rem; }
-.entry-body .note { color: var(--faint); font-size: 0.95rem; max-width: 56ch; }
+.entry-body .note { color: var(--dim); font-size: 0.97rem; max-width: 56ch; }
 .entry-links { display: flex; flex-wrap: wrap; gap: 0 1.1rem; margin-top: 0.5rem; font-family: var(--display); font-size: 0.85rem; font-weight: 600; }
 .entry-links a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
 .entry-links a:hover { color: var(--light); border-bottom-color: var(--tone); }
 .entry.is-tbc .entry-body h3 { color: var(--dim); }
 
 
-
-/* ─── background music (opt-in) ───────────────────────────────── */
-.ambience {
-  position: fixed; left: 0; bottom: 0; z-index: 50;
-  width: var(--rail); padding: 0 0 1.1rem 1.1rem;
-  display: flex; flex-direction: column; gap: 0.45rem;
-}
-.ambience[hidden] { display: none; }
-.ambience-toggle {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  background: none; border: 0; padding: 0; cursor: pointer;
-  font-family: var(--display); font-size: 0.72rem; font-weight: 600;
-  color: var(--faint); text-align: left;
-}
-.ambience-toggle:hover { color: var(--light); }
-.ambience-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 0.7rem; }
-.ambience-bars i { width: 2px; height: 35%; background: currentColor; }
-.ambience.is-playing .ambience-toggle { color: var(--band-1); }
-.ambience.is-playing .ambience-bars i { animation: bars 900ms ease-in-out infinite; }
-.ambience.is-playing .ambience-bars i:nth-child(2) { animation-delay: 150ms; }
-.ambience.is-playing .ambience-bars i:nth-child(3) { animation-delay: 300ms; }
-@keyframes bars { 0%, 100% { height: 30%; } 50% { height: 100%; } }
-@media (prefers-reduced-motion: reduce) { .ambience-bars i { animation: none !important; } }
-.ambience-now { margin: 0; font-size: 0.68rem; line-height: 1.3; color: var(--faint); font-style: italic; max-width: 100%; }
-.ambience.is-playing .ambience-now { color: var(--dim); }
-.ambience-now a { color: inherit; text-decoration-color: color-mix(in oklab, var(--band-2) 50%, transparent); }
 
 /* ─── experience ──────────────────────────────────────────────── */
 .experience { margin-top: clamp(1.8rem, 3.5vw, 2.8rem); }

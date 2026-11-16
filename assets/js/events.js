@@ -22,6 +22,7 @@ window.EVENTS = [
     title: 'Sing Sang Sung with ETO',
     venue: 'Blue Note Taipei',
     venueUrl: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-shou-zhou-zhou-liu-te-yan-xiao-jiu-guan-li-de-da-le-tuan-8',
+    poster: 'https://static.wixstatic.com/media/973c52_883a700c30f04574bbc80b8e008b3792~mv2.png/v1/fill/w_900,h_900,al_c/973c52_883a700c30f04574bbc80b8e008b3792~mv2.png',
     note: 'A big band in a small bar. Three hours with the ETO Jazz Big Band, swapping between full band and smaller combos. Doors at 8, music at 9.'
   },
   {

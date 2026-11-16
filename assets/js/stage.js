@@ -40,6 +40,7 @@
 
   /* ── geometry ───────────────────────────────────────────────── */
   var dpr = 1, W = 0, H = 0, PAD_B = 18, PAD_T = 8;
+  var PAD_L = 0, PAD_R = 0, PLOT = 0;
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     var r = canvas.getBoundingClientRect();
@@ -47,10 +48,13 @@
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    PAD_L = W * 0.07;
+    PAD_R = W * 0.10;
+    PLOT = W - PAD_L - PAD_R;
   }
   var logMin = Math.log(F_MIN), logSpan = Math.log(F_MAX) - logMin;
-  function xOf(f) { return (Math.log(f) - logMin) / logSpan * W; }
-  function fOf(x) { return Math.exp(logMin + (x / W) * logSpan); }
+  function xOf(f) { return PAD_L + (Math.log(f) - logMin) / logSpan * PLOT; }
+  function fOf(x) { return Math.exp(logMin + ((x - PAD_L) / PLOT) * logSpan); }
   function yOf(db) {
     var top = PAD_T, bot = H - PAD_B;
     return bot - ((db + DB) / (DB * 2)) * (bot - top);
@@ -167,7 +171,7 @@
     else g.setValueAtTime(db, ac.currentTime);
   }
 
-  var dragging = -1, dragMoved = false;
+  var dragging = -1, dragMoved = false, current = 'flat';
 
   function local(e) {
     var r = canvas.getBoundingClientRect();
@@ -204,6 +208,14 @@
       canvas.releasePointerCapture(e.pointerId);
     }
   }
+  canvas.addEventListener('dblclick', function (e) {
+    if (!ac && !build()) return;
+    var p = local(e);
+    var i = nearest(p.x, p.y);
+    if (i < 0) return;
+    var preset = PRESETS[current] || PRESETS.flat;
+    setGain(i, preset[i], true);
+  });
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
   canvas.addEventListener('pointerleave', function () { if (dragging < 0) hover = -1; });
@@ -222,6 +234,7 @@
       var p = PRESETS[btn.getAttribute('data-preset')];
       if (!p) return;
       p.forEach(function (db, i) { setGain(i, db, true); });
+      current = btn.getAttribute('data-preset');
       document.querySelectorAll('[data-preset]').forEach(function (b) { b.classList.remove('is-on'); });
       btn.classList.add('is-on');
     });
@@ -253,7 +266,7 @@
     /* 0 dB line and frequency ticks */
     ctx.strokeStyle = 'rgba(188,168,147,0.12)';
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(0, yOf(0)); ctx.lineTo(W, yOf(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PAD_L, yOf(0)); ctx.lineTo(W - PAD_R, yOf(0)); ctx.stroke();
     ctx.font = '10px Newsreader, Georgia, serif';
     ctx.fillStyle = 'rgba(139,117,99,0.8)';
     ctx.textAlign = 'center';
@@ -268,14 +281,14 @@
       analyser.getByteFrequencyData(bins);
       var nyquist = ac.sampleRate / 2;
       ctx.beginPath();
-      ctx.moveTo(0, H - PAD_B);
-      for (var x = 0; x <= W; x += 2) {
+      ctx.moveTo(PAD_L, H - PAD_B);
+      for (var x = PAD_L; x <= W - PAD_R; x += 2) {
         var f = fOf(x);
         var bin = Math.round(f / nyquist * bins.length);
         var v = bins[Math.min(bins.length - 1, bin)] / 255;
         ctx.lineTo(x, (H - PAD_B) - v * (H - PAD_B - PAD_T) * 0.92);
       }
-      ctx.lineTo(W, H - PAD_B);
+      ctx.lineTo(W - PAD_R, H - PAD_B);
       var grad = ctx.createLinearGradient(0, PAD_T, 0, H - PAD_B);
       grad.addColorStop(0, 'rgba(244,178,63,0.30)');
       grad.addColorStop(1, 'rgba(244,178,63,0.02)');

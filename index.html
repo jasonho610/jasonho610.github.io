@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=15">
+<link rel="stylesheet" href="assets/css/site.css?v=16">
 </head>
 <body>
 
@@ -21,7 +21,7 @@
   <a href="#top"     style="--tick:var(--band-1)"><span class="rail-label">top</span></a>
   <a href="#about"   style="--tick:var(--band-2)"><span class="rail-label">about</span></a>
   <a href="#work"    style="--tick:var(--band-4)"><span class="rail-label">work</span></a>
-  <a href="calendar.html" style="--tick:var(--band-6)"><span class="rail-label">calendar</span></a>
+  <a href="calendar.html" data-watch="onstage" style="--tick:var(--band-6)"><span class="rail-label">calendar</span></a>
   <a href="#contact" style="--tick:var(--band-1)"><span class="rail-label">contact</span></a>
 </nav>
 
@@ -30,7 +30,7 @@
   <a href="#top">top</a>
   <a href="#about">about</a>
   <a href="#work">work</a>
-  <a href="calendar.html">calendar</a>
+  <a href="calendar.html" data-watch="onstage">calendar</a>
   <a href="#contact">contact</a>
 </nav>
 
@@ -44,14 +44,17 @@
     <p class="hero-sub">Audio DSP and ML. Jazz Saxophonist.</p>
 
     <div class="hero-controls">
-      <button class="listen" type="button" aria-pressed="false">
-        <span class="dot" aria-hidden="true"></span><span class="label">play a sound</span>
+      <button class="transport" type="button" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span><span class="label">play</span>
       </button>
+      <button class="eq-reset" type="button">flat</button>
+      <span class="now-playing"></span>
     </div>
   </div>
 
   <div class="hero-canvas-wrap">
-    <canvas id="spectrum" aria-hidden="true"></canvas>
+    <canvas id="eq" aria-label="Ten-band equaliser with a live analyser. Click a band to boost it."></canvas>
+    <p class="eq-hint">ten bands, 30 Hz to 16 kHz — click one to boost it</p>
   </div>
 </header>
 
@@ -63,48 +66,22 @@
   <div class="statement-body">
     <p>The two keep meeting. Musicians spend years learning which differences in sound matter — which take is better, which frequency is fighting the vocal. I want audio models to learn the same things, and I want to be able to check whether they really did.</p>
     <p>I started with DSP: a loudness meter in C++ at NTPU. Then speech enhancement for my master’s at NTNU, two years writing real-time effects at Positive Grid, and now MixJudge, a model you can ask in plain words what a vocal mix needs.</p>
-    <p>I am applying for PhD study in music technology, starting autumn 2027.</p>
   </div>
   </div>
 </section>
 
 <section id="work" class="wrap">
-  <div class="strands">
-    <article style="--tone:var(--band-6)">
-      <h2>Building</h2>
-      <p>Teaching models musical ideas. MixJudge learns eleven things that commonly go wrong in a vocal mix, so you can ask it what a mix needs and it can rank how badly it needs it.</p>
-    </article>
-    <article style="--tone:var(--band-4)">
-      <h2>Understanding</h2>
-      <p>Checking what a model actually uses. I rebuilt a speech model so you can simply read off which frequency bands it leans on, instead of guessing from a score.</p>
-    </article>
-    <article style="--tone:var(--band-1)">
-      <h2>Playing along</h2>
-      <p>The long-term goal: an accompanist that listens. One that keeps the groove, follows the energy, leaves space, and answers a phrase when answering is the right call.</p>
-    </article>
-  </div>
-
-  <div class="picks">
-    <h3>Worth a look</h3>
-    <ul>
-      <li>
-        <a href="https://arxiv.org/abs/2610.30783"><strong>MixJudge</strong></a>
-        <span>Ask it, in plain words, what is wrong with a vocal mix.</span>
-      </li>
-      <li>
-        <a href="https://doi.org/10.1109/ICASSP48485.2024.10445878"><strong>What Do Neural Networks Listen To?</strong></a>
-        <span>Rebuilding a speech model so its frequency selectivity is something you can simply read off. ICASSP 2024.</span>
-      </li>
-      <li>
-        <a href="https://github.com/jasonho610/ITU-R_BS.1770-4_cpp"><strong>A loudness meter</strong></a>
-        <span>Loudness and true-peak metering in C++, written to the ITU-R standard.</span>
-      </li>
-    </ul>
-  </div>
-
   <div class="experience">
-    <h3>Experience</h3>
+    <h3>Audio technology</h3>
     <ul>
+      <li>
+        <span class="exp-when">2025 – now</span>
+        <div>
+          <h4>Independent research, with Prof. Yi-Hsuan Yang at NTU</h4>
+          <p>MixJudge: a model you can ask, in plain words, what is wrong with a vocal mix. It learns eleven common problems and ranks how badly a mix has each one.</p>
+          <p class="exp-links"><a href="https://arxiv.org/abs/2610.30783">arXiv:2610.30783</a> · submitted to ICASSP 2027</p>
+        </div>
+      </li>
       <li>
         <span class="exp-when">2024 – 2026</span>
         <div>
@@ -113,17 +90,19 @@
         </div>
       </li>
       <li>
-        <span class="exp-when">2025 – now</span>
-        <div>
-          <h4>Independent research, with Prof. Yi-Hsuan Yang at NTU</h4>
-          <p>MixJudge: a model that judges vocal mixes against a problem you describe in words. Submitted to ICASSP 2027.</p>
-        </div>
-      </li>
-      <li>
         <span class="exp-when">2021 – 2023</span>
         <div>
           <h4>M.S. research, with Prof. Berlin Chen at NTNU</h4>
-          <p>Speech enhancement and noise-robust recognition, plus a collaboration with Realtek on detecting the wearer’s own voice. Five papers at ICASSP, Interspeech, MLSP and SLT.</p>
+          <p>Speech enhancement and noise-robust recognition, plus a collaboration with Realtek on spotting the wearer’s own voice. Five papers at ICASSP, Interspeech, MLSP and SLT.</p>
+          <p class="exp-links"><a href="https://doi.org/10.1109/ICASSP48485.2024.10445878">What Do Neural Networks Listen To? — ICASSP 2024</a></p>
+        </div>
+      </li>
+      <li>
+        <span class="exp-when">Open source</span>
+        <div>
+          <h4>ITU-R BS.1770-4 loudness meter</h4>
+          <p>Loudness and true-peak metering in C++, written to the standard, with Prof. Chen-Yu Chiang at NTPU.</p>
+          <p class="exp-links"><a href="https://github.com/jasonho610/ITU-R_BS.1770-4_cpp">On GitHub</a></p>
         </div>
       </li>
       <li>
@@ -131,13 +110,45 @@
         <div>
           <h4>M.S. Computer Science, NTNU · B.S. Computer Science, NTPU</h4>
           <p>Master’s 2021–2023, thesis on compatibility and interpretability in speech enhancement. Bachelor’s 2017–2021; the capstone project became patent TWI821594B.</p>
+          <p class="exp-links"><a href="assets/cv/Ho_Kuan-Hsun_academic_CV.pdf">Academic CV (PDF)</a> · <a href="assets/cv/Ho_Kuan-Hsun_resume.pdf">Industry résumé (PDF)</a></p>
         </div>
       </li>
     </ul>
-    <p class="more"><a href="assets/cv/Ho_Kuan-Hsun_academic_CV.pdf">Academic CV (PDF)</a> · <a href="assets/cv/Ho_Kuan-Hsun_resume.pdf">Industry résumé (PDF)</a></p>
+
+    <h3 class="exp-second">Music</h3>
+    <ul>
+      <li>
+        <span class="exp-when">2020 – now</span>
+        <div>
+          <h4>Lead tenor, Equal To One Jazz Orchestra</h4>
+          <p>Resident big band at Blue Note Taipei, playing the first Saturday of every month.</p>
+        </div>
+      </li>
+      <li>
+        <span class="exp-when">2020 – now</span>
+        <div>
+          <h4>Tenor saxophone and session work</h4>
+          <p>Uno Kaoru Quartet, Jazz Meta Band, and my own quintet. Regular nights at Blue Note Taipei and Sappho Live Jazz.</p>
+        </div>
+      </li>
+      <li>
+        <span class="exp-when">Festivals</span>
+        <div>
+          <h4>Taipei Jazz Festival · NTCH Summer Jazz · Taichung Jazz Festival</h4>
+          <p>Taipei Jazz Festival twice by open call.</p>
+        </div>
+      </li>
+      <li>
+        <span class="exp-when">On record</span>
+        <div>
+          <h4>“Lover’s Ring” — Daniel Chen</h4>
+          <p>Featured soloist on <em>The Sea, The Sky, The You and I</em>, nominated for Best Jazz Album at the Golden Indie Music Awards.</p>
+        </div>
+      </li>
+    </ul>
   </div>
 
-  <div class="onstage">
+  <div class="onstage" id="onstage">
     <h3>On stage</h3>
     <div id="next-up"></div>
     <p class="more"><a href="calendar.html">Every date, past and planned</a></p>
@@ -159,15 +170,26 @@
 </section>
 
 <section id="contact" class="wrap">
-  <div class="section-head"><h2>Say hello</h2></div>
+  <div class="section-head"><h2>Collaborate? Create? Drop me a message</h2></div>
   <a class="big-mail" href="mailto:jasonho610@gmail.com">jasonho610@gmail.com</a>
 
   <div class="contact-grid">
     <div>
       <h3>Elsewhere</h3>
-      <a href="https://github.com/jasonho610">GitHub</a>
-      <a href="https://www.linkedin.com/in/kuan-hsun-ho">LinkedIn</a>
-      <a href="https://www.youtube.com/@jasonho610">YouTube</a>
+      <div class="social">
+        <a href="https://github.com/jasonho610" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/kuan-hsun-ho" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 20.4h-3.6v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1a3.8 3.8 0 0 1 3.4-1.9c3.6 0 4.3 2.4 4.3 5.5v6.2ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7 20.4H3.5V9H7v11.4ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7c0-.9-.8-1.7-1.8-1.7Z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@jasonho610" aria-label="YouTube" title="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/jasonho610/" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.3 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2a3.9 3.9 0 0 1-2.3 2.3c-.4.2-1 .3-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4a3.9 3.9 0 0 1-2.3-2.3c-.2-.4-.3-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.3 2.2-.4 1.3-.1 1.7-.1 4.9-.1Zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.2.8-.4.3-.6.7-.8 1.2-.2.4-.3 1-.4 2.1-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.2.3.4.7.6 1.2.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.2-.8.4-.3.6-.7.8-1.2.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1a3.3 3.3 0 0 0-2-2c-.4-.2-1-.3-2.1-.4-1.2-.1-1.6-.1-4.7-.1Zm0 3.1a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Zm5.2-3.2a1.2 1.2 0 1 1 0 2.3 1.2 1.2 0 0 1 0-2.3Z"/></svg>
+        </a>
+      </div>
     </div>
     <div>
       <h3>CV</h3>
@@ -176,7 +198,7 @@
     </div>
     <div>
       <h3>Where</h3>
-      <p class="plain">Taipei, Taiwan. Applying for PhD study in music technology, autumn 2027.</p>
+      <p class="plain">Taipei, Taiwan.</p>
     </div>
   </div>
 
@@ -188,9 +210,8 @@
 </main>
 </div>
 
-<script src="assets/js/spectrum.js?v=15"></script>
-<script src="assets/js/events.js?v=15"></script>
-<script src="assets/js/calendar.js?v=15"></script>
-<script src="assets/js/ambience.js?v=15"></script>
+<script src="assets/js/events.js?v=16"></script>
+<script src="assets/js/calendar.js?v=16"></script>
+<script src="assets/js/stage.js?v=16"></script>
 </body>
 </html>

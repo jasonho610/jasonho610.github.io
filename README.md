@@ -12,10 +12,9 @@ index.html                 the front page — intro, about, work, experience, on
 calendar.html              gigs, conferences and other dates
 assets/js/events.js        THE calendar data — the only file to edit when a date changes
 assets/js/calendar.js      draws the year axis and the lists from events.js
-assets/js/ambience.js      the opt-in background music player
 assets/audio/              the music files — see the README in that folder
 assets/css/site.css        every style on the site
-assets/js/spectrum.js      the hero filterbank, rail highlighting, click-to-load video
+assets/js/stage.js         the ten-band EQ at the top of the page, the music, the rail highlighting
 assets/img/*.jpg           the one photograph on the site, behind the next date up
 assets/cv/*.pdf            the two CVs, offered as downloads from the page
 ```
@@ -27,15 +26,16 @@ python3 -m http.server 8787
 # then open http://localhost:8787
 ```
 
-## The hero
+## The EQ at the top of the page
 
-The six curves are the magnitude responses of six bandpass filters an octave apart
-(110 Hz to 3520 Hz), drawn on a log frequency axis. **hear the filterbank** builds the same
-six filters in the Web Audio API, runs noise through them, opens them one at a time and then
-all together, and drives the drawing from analysers on each band. Nothing plays until clicked,
-and `prefers-reduced-motion` freezes the animation.
+A real ten-band equaliser, laid out like the one in BIAS X: a low shelf at 30 Hz (Q 4), eight peaks
+an octave apart from 60 Hz to 8 kHz (Q 1.5), a high shelf at 16 kHz (Q 4), ±15 dB.
 
-To change the bands, edit the `BANDS` array at the top of `assets/js/spectrum.js`.
+Left alone it shows the music moving through the analyser. Click a band and that band really is
+boosted — the Web Audio biquads change, the curve redraws from `getFrequencyResponse`, and you hear
+it. Click again, or press **flat**, to return to 0 dB.
+
+To change the bands, edit the `BANDS` array at the top of `assets/js/stage.js`.
 
 ## Still to fill in
 
@@ -87,7 +87,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=15`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=16`. **Bump that
 number in every HTML file whenever you change CSS or JS.**
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules

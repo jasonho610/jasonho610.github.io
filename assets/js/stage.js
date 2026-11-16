@@ -148,6 +148,10 @@
   function showPanel(on) { panel.hidden = !on; }
   dock.addEventListener('pointerenter', function () { showPanel(true); });
   dock.addEventListener('pointerleave', function () { showPanel(false); });
+  dock.addEventListener('mouseenter', function () { showPanel(true); });
+  dock.addEventListener('mouseleave', function () { showPanel(false); });
+  /* touch has no hover: tapping the panel area opens it */
+  button.addEventListener('contextmenu', function (e) { e.preventDefault(); showPanel(panel.hidden); });
   dock.addEventListener('focusin', function () { showPanel(true); });
   dock.addEventListener('focusout', function (e) {
     if (!dock.contains(e.relatedTarget)) showPanel(false);

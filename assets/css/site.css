@@ -331,39 +331,7 @@ footer .credit { margin-bottom: 0.8rem; }
 .entry-links a:hover { color: var(--light); border-bottom-color: var(--tone); }
 .entry.is-tbc .entry-body h3 { color: var(--dim); }
 
-/* These override rules defined above them in this file, so the block has to
-   stay last — an identical media query earlier would simply lose. */
-@media (max-width: 900px) {
-  /* the scrim has to follow the layout: on a narrow card the text spans the
-     whole photo, so darken from the bottom rather than from the left */
-  .next {
-    min-height: 23rem;
-    background-position: 62% 18%;
-    background-image:
-      linear-gradient(to top,
-        var(--stage) 0%,
-        color-mix(in oklab, var(--stage) 95%, transparent) 46%,
-        color-mix(in oklab, var(--stage) 62%, transparent) 72%,
-        color-mix(in oklab, var(--stage) 24%, transparent) 100%),
-      url("../img/blue-note-stage.jpg");
-  }
-  .next > * { max-width: none; }
 
-  /* the calendar row collapses to one column, with the date on one line */
-  .entry { grid-template-columns: 1fr; gap: 0.4rem; }
-  .experience li { grid-template-columns: 1fr; gap: 0.35rem; }
-  .entry-when { flex-direction: row; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
-  .entry-when .meta { margin-top: 0; }
-
-  /* flex-basis cannot force a wrap while a max-width clamps the item, so the
-     clamp lives on the image instead */
-  .poster { flex: 0 0 100%; margin-top: 0.7rem; }
-
-  /* keep the whole year readable — scroll it rather than drop the months */
-  .axes-block { overflow-x: auto; padding-bottom: 0.5rem; }
-  .axis { min-width: 29rem; }
-  .axis-month-label { font-size: 0.6rem; }
-}
 
 /* ─── background music (opt-in) ───────────────────────────────── */
 .ambience {
@@ -443,8 +411,7 @@ footer .credit { margin-bottom: 0.8rem; }
 .presets button.is-on { color: var(--stage); background: var(--band-1); border-color: var(--band-1); }
 
 .player {
-  position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem);
-  z-index: 60; width: 3.1rem; height: 3.1rem; border-radius: 50%;
+  width: 3.1rem; height: 3.1rem; border-radius: 50%;
   display: grid; place-items: center; cursor: pointer;
   background: color-mix(in oklab, var(--stage) 86%, transparent);
   border: 1px solid var(--line); color: var(--dim);
@@ -472,3 +439,66 @@ footer .credit { margin-bottom: 0.8rem; }
   border-radius: 999px; padding: 0.35rem 0.85rem; cursor: pointer;
 }
 .played-toggle:hover { color: var(--light); border-color: var(--band-1); }
+
+/* ─── the player panel ────────────────────────────────────────── */
+.player-dock {
+  position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 60; display: flex; flex-direction: column; align-items: flex-end; gap: 0.6rem;
+}
+.player { position: static; }
+.player-panel {
+  width: 15rem; padding: 0.9rem 1rem;
+  background: color-mix(in oklab, var(--stage-lift) 94%, transparent);
+  border: 1px solid var(--line); border-radius: 0.6rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.45);
+}
+.player-panel[hidden] { display: none; }
+.pp-tracks { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 0.7rem; }
+.pp-track {
+  font-family: var(--display); font-size: 0.8rem; font-weight: 600; text-align: left;
+  background: none; border: 0; padding: 0.35rem 0.4rem; border-radius: 0.3rem;
+  color: var(--faint); cursor: pointer;
+}
+.pp-track:hover { color: var(--light); background: color-mix(in oklab, var(--band-1) 12%, transparent); }
+.pp-track.is-on { color: var(--band-1); }
+.pp-seek { width: 100%; accent-color: var(--band-1); cursor: pointer; }
+.pp-time { margin: 0.35rem 0 0; font-size: 0.72rem; color: var(--faint); font-style: italic; }
+
+/* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
+   Everything here overrides rules defined above it. Add new base rules
+   ABOVE this block, never below, or they will quietly win on mobile. */
+@media (max-width: 900px) {
+  /* the scrim has to follow the layout: on a narrow card the text spans the
+     whole photo, so darken from the bottom rather than from the left */
+  .next {
+    min-height: 23rem;
+    background-position: 62% 18%;
+    background-image:
+      linear-gradient(to top,
+        var(--stage) 0%,
+        color-mix(in oklab, var(--stage) 95%, transparent) 46%,
+        color-mix(in oklab, var(--stage) 62%, transparent) 72%,
+        color-mix(in oklab, var(--stage) 24%, transparent) 100%),
+      url("../img/blue-note-stage.jpg");
+  }
+  .next > * { max-width: none; }
+
+  /* the calendar row collapses to one column, with the date on one line */
+  .experience li { grid-template-columns: 1fr; gap: 0.35rem; }
+  .exp-when { color: var(--band-1); }
+  .listen-list li { grid-template-columns: minmax(0, 1fr) auto; }
+  .entry { grid-template-columns: 1fr; gap: 0.4rem; }
+  .experience li { grid-template-columns: 1fr; gap: 0.35rem; }
+  .entry-when { flex-direction: row; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
+  .entry-when .meta { margin-top: 0; }
+
+  /* flex-basis cannot force a wrap while a max-width clamps the item, so the
+     clamp lives on the image instead */
+  .poster { flex: 0 0 100%; margin-top: 0.7rem; }
+
+  /* keep the whole year readable — scroll it rather than drop the months */
+  .axes-block { overflow-x: auto; padding-bottom: 0.5rem; }
+  .axis { min-width: 29rem; }
+  .axis-month-label { font-size: 0.6rem; }
+}

@@ -9,8 +9,8 @@
   'use strict';
 
   var canvas = document.getElementById('eq');
-  if (!canvas || !canvas.getContext) return;
-  var ctx = canvas.getContext('2d');
+  var hasEQ = !!(canvas && canvas.getContext);
+  var ctx = hasEQ ? canvas.getContext('2d') : null;
 
   var F_MIN = 20, F_MAX = 20000, DB = 14, MAX_GAIN = 12;
 
@@ -60,8 +60,7 @@
     var top = PAD_T, bot = H - PAD_B;
     return bot - ((db + DB) / (DB * 2)) * (bot - top);
   }
-  resize();
-  window.addEventListener('resize', resize);
+  if (hasEQ) { resize(); window.addEventListener('resize', resize); }
 
   /* ── audio graph ────────────────────────────────────────────── */
   function build() {
@@ -105,12 +104,89 @@
     audio.play().catch(pause);
   }
 
-  /* ── transport ──────────────────────────────────────────────── */
-  var button = document.querySelector('.player');
-  var label = button && button.querySelector('.sr');
+  /* ── the floating player, with a panel on hover ─────────────── */
+  var KEY = 'stage-player';
+
+  var dock = document.createElement('div');
+  dock.className = 'player-dock';
+  dock.innerHTML =
+    '<div class="player-panel" hidden>' +
+      '<div class="pp-tracks"></div>' +
+      '<input class="pp-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">' +
+      '<p class="pp-time"><span class="pp-now">0:00</span> / <span class="pp-dur">0:00</span></p>' +
+    '</div>' +
+    '<button class="player" type="button" aria-pressed="false" aria-label="Play music">' +
+      '<span class="sr">Play music</span>' +
+      '<svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>' +
+      '<svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.2v14H7zm6.8 0H17v14h-3.2z"/></svg>' +
+    '</button>';
+  document.body.appendChild(dock);
+
+  var button = dock.querySelector('.player');
+  var label = dock.querySelector('.sr');
+  var panel = dock.querySelector('.player-panel');
+  var seek = dock.querySelector('.pp-seek');
+  var nowEl = dock.querySelector('.pp-now');
+  var durEl = dock.querySelector('.pp-dur');
   var nowPlaying = document.querySelector('.now-playing');
 
+  TRACKS.forEach(function (t, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pp-track';
+    b.textContent = t.title;
+    b.addEventListener('click', function () { choose(i); });
+    dock.querySelector('.pp-tracks').appendChild(b);
+  });
+
+  function markTrack() {
+    Array.prototype.forEach.call(dock.querySelectorAll('.pp-track'), function (b, i) {
+      b.classList.toggle('is-on', i === track);
+    });
+  }
+
+  function showPanel(on) { panel.hidden = !on; }
+  dock.addEventListener('pointerenter', function () { showPanel(true); });
+  dock.addEventListener('pointerleave', function () { showPanel(false); });
+  dock.addEventListener('focusin', function () { showPanel(true); });
+  dock.addEventListener('focusout', function (e) {
+    if (!dock.contains(e.relatedTarget)) showPanel(false);
+  });
+
+  function clock(sec) {
+    if (!isFinite(sec)) return '0:00';
+    var m = Math.floor(sec / 60), s2 = Math.floor(sec % 60);
+    return m + ':' + (s2 < 10 ? '0' : '') + s2;
+  }
+  function tick() {
+    if (!audio || !audio.duration) return;
+    if (!seeking) seek.value = String(Math.round(audio.currentTime / audio.duration * 1000));
+    nowEl.textContent = clock(audio.currentTime);
+    durEl.textContent = clock(audio.duration);
+  }
+  var seeking = false;
+  seek.addEventListener('pointerdown', function () { seeking = true; });
+  seek.addEventListener('change', function () {
+    seeking = false;
+    if (audio && audio.duration) audio.currentTime = (seek.value / 1000) * audio.duration;
+  });
+  seek.addEventListener('input', function () {
+    if (audio && audio.duration) nowEl.textContent = clock((seek.value / 1000) * audio.duration);
+  });
+
+  function choose(i) {
+    var wasPlaying = playing;
+    if (!ac && !build()) return;
+    track = i;
+    audio.src = TRACKS[track].src;
+    markTrack();
+    describe();
+    save();
+    if (wasPlaying) play(); else tick();
+  }
+
   function describe() {
+    markTrack();
     if (!nowPlaying) return;
     var t = TRACKS[track];
     nowPlaying.innerHTML = '';
@@ -121,31 +197,50 @@
     nowPlaying.appendChild(document.createTextNode(' · CC BY'));
   }
 
+  /* carry the music across a page change */
+  function save() {
+    try {
+      sessionStorage.setItem(KEY, JSON.stringify({
+        track: track,
+        time: audio ? audio.currentTime : 0,
+        playing: playing,
+        gains: gains
+      }));
+    } catch (e) {}
+  }
+  function restore() {
+    try { return JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (e) { return null; }
+  }
+  window.addEventListener('pagehide', save);
+  window.addEventListener('beforeunload', save);
+  setInterval(function () { if (playing) save(); }, 2000);
+
   function play() {
     if (!ac && !build()) return;
-    /* The element is wired into the graph, so it will not start while the
-       context is still suspended — resume first, then play, or the promise
-       simply hangs and nothing happens. */
     var ready = ac.state === 'suspended' ? ac.resume() : Promise.resolve();
     ready.then(function () {
       audio.preload = 'auto';
       return audio.play();
     }).then(function () {
       playing = true;
-      if (button) { button.classList.add('is-playing'); button.setAttribute('aria-pressed', 'true'); }
-      if (label) label.textContent = 'Pause music';
-      if (button) button.setAttribute('aria-label', 'Pause music');
+      button.classList.add('is-playing');
+      button.setAttribute('aria-pressed', 'true');
+      button.setAttribute('aria-label', 'Pause music');
+      label.textContent = 'Pause music';
       describe();
+      save();
     }).catch(pause);
   }
   function pause() {
     playing = false;
     if (audio) audio.pause();
-    if (button) { button.classList.remove('is-playing'); button.setAttribute('aria-pressed', 'false'); }
-    if (label) label.textContent = 'Play music';
-    if (button) button.setAttribute('aria-label', 'Play music');
+    button.classList.remove('is-playing');
+    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('aria-label', 'Play music');
+    label.textContent = 'Play music';
+    save();
   }
-  if (button) button.addEventListener('click', function () { playing ? pause() : play(); });
+  button.addEventListener('click', function () { playing ? pause() : play(); });
 
   /* ── bands can be dragged, or clicked to toggle ─────────────── */
   function nearest(x, y) {
@@ -184,6 +279,7 @@
     var r = canvas.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   }
+  if (hasEQ) {
   canvas.addEventListener('pointerdown', function (e) {
     if (!ac && !build()) return;
     var p = local(e);
@@ -218,14 +314,19 @@
   canvas.addEventListener('dblclick', function (e) {
     if (!ac && !build()) return;
     var p = local(e);
-    var i = nearest(p.x, p.y);
-    if (i < 0) return;
+    var i = -1, best = 1e9;
+    BANDS.forEach(function (b, k) {
+      var d = Math.abs(xOf(b.f) - p.x);
+      if (d < best) { best = d; i = k; }
+    });
+    if (best > 36) return;
     var preset = PRESETS[current] || PRESETS.flat;
     setGain(i, preset[i], true);
   });
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
   canvas.addEventListener('pointerleave', function () { if (dragging < 0) hover = -1; });
+  }
 
   /* ── presets ────────────────────────────────────────────────── */
   var PRESETS = {
@@ -339,22 +440,35 @@
   }
 
   function schedule() {
-    if (!onScreen) { ticking = false; return; }
+    if (!hasEQ || !onScreen) { ticking = false; return; }
     ticking = true;
     requestAnimationFrame(frame);
   }
   function wake() { if (!ticking) schedule(); }
 
-  if ('IntersectionObserver' in window) {
+  if (hasEQ && 'IntersectionObserver' in window) {
     new IntersectionObserver(function (e) { onScreen = e[0].isIntersecting; wake(); },
       { rootMargin: '120px' }).observe(canvas);
   }
   document.addEventListener('visibilitychange', function () { if (!document.hidden) wake(); });
 
+  /* pick up wherever the last page left off */
+  var saved = restore();
+  if (saved) {
+    if (typeof saved.track === 'number') track = saved.track % TRACKS.length;
+    if (Array.isArray(saved.gains)) gains = saved.gains.slice(0, BANDS.length);
+  }
   describe();
-  schedule();
+  if (hasEQ) schedule();
+  setInterval(tick, 250);
 
-  /* try to start on arrival; browsers usually say no until you click */
+  if (saved && saved.time && build()) {
+    audio.currentTime = saved.time;
+    tick();
+  }
+
+  /* resume if the music was playing on the previous page; browsers block this
+     until the visitor has interacted with the site, so it is best effort */
   play();
 })();
 

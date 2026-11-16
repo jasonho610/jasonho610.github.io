@@ -74,7 +74,12 @@ Past and upcoming are split automatically against today's date — nothing to mo
 
 ## Background music
 
-A small control sits in the bottom-left corner. The page tries to start the music on arrival, but
+A round control floats in the bottom-right corner of every page. Hovering it opens a panel with the
+track list and a seek bar. Playback position, track and EQ settings are kept in `sessionStorage`, so
+moving between pages picks up where it left off — though the browser may require one click before it
+will make sound again.
+
+The old note still applies: The page tries to start the music on arrival, but
 browsers block audible autoplay until a visitor has interacted with the site, so on a first visit the
 button is what actually starts it. There is no way around that from a web page — it is a browser
 policy, not a setting. While music plays, the curves at the top of the page follow it.
@@ -90,12 +95,12 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=22`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=23`. **Bump that
 number in every HTML file whenever you change CSS or JS.**
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules
-defined above it. Put mobile overrides there, not in the earlier media query — an identical media
-query that appears earlier in the file simply loses the cascade. New URL, no stale cache, no waiting.
+defined above it. Put mobile overrides there, and add new base rules **above** that block — anything
+written below it silently wins on mobile. This has bitten the layout twice. New URL, no stale cache, no waiting.
 
 (A hard reload — ⌘⇧R — fixes it for you, but not for anyone else visiting.)
 

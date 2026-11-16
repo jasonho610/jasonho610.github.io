@@ -115,11 +115,13 @@
       '<input class="pp-seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">' +
       '<p class="pp-time"><span class="pp-now">0:00</span> / <span class="pp-dur">0:00</span></p>' +
     '</div>' +
+    '<span class="player-nudge">play the music</span>' +
     '<button class="player" type="button" aria-pressed="false" aria-label="Play music">' +
       '<span class="sr">Play music</span>' +
       '<svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>' +
       '<svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.2v14H7zm6.8 0H17v14h-3.2z"/></svg>' +
     '</button>';
+  try { if (sessionStorage.getItem('stage-played')) dock.classList.add('has-played'); } catch (e) {}
   document.body.appendChild(dock);
 
   var button = dock.querySelector('.player');
@@ -227,6 +229,8 @@
       return audio.play();
     }).then(function () {
       playing = true;
+      dock.classList.add('has-played');
+      try { sessionStorage.setItem('stage-played', '1'); } catch (e) {}
       button.classList.add('is-playing');
       button.setAttribute('aria-pressed', 'true');
       button.setAttribute('aria-label', 'Pause music');
@@ -305,11 +309,8 @@
   });
   function endDrag(e) {
     if (dragging < 0) return;
-    if (!dragMoved) {
-      /* a tap with no movement toggles the band */
-      var cur = gains[dragging];
-      setGain(dragging, Math.abs(cur) < 0.5 ? MAX_GAIN : 0, true);
-    }
+    /* a click on its own does nothing on purpose — drag to set a band,
+       double-click to put it back to the preset */
     dragging = -1;
     if (e && e.pointerId !== undefined && canvas.hasPointerCapture(e.pointerId)) {
       canvas.releasePointerCapture(e.pointerId);
@@ -401,11 +402,19 @@
         ctx.lineTo(x, (H - PAD_B) - v * (H - PAD_B - PAD_T) * 0.92);
       }
       ctx.lineTo(W - PAD_R, H - PAD_B);
-      var grad = ctx.createLinearGradient(0, PAD_T, 0, H - PAD_B);
-      grad.addColorStop(0, 'rgba(244,178,63,0.30)');
-      grad.addColorStop(1, 'rgba(244,178,63,0.02)');
+      var grad = ctx.createLinearGradient(PAD_L, 0, W - PAD_R, 0);
+      BANDS.forEach(function (b, i) {
+        grad.addColorStop(i / (BANDS.length - 1), b.color + 'B0');
+      });
       ctx.fillStyle = grad;
+      ctx.globalAlpha = 0.55;
       ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = grad;
+      ctx.globalAlpha = 0.9;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
     }
 
     /* the EQ response */

@@ -10,8 +10,8 @@
   --line:         #352925;
 
   --light:        #F4EADB;
-  --dim:          #BCA893;
-  --faint:        #8B7563;
+  --dim:          #D6C5AE;
+  --faint:        #A08B74;
 
   /* the spectrum ramp, warm to cool, the way the room is lit */
   --band-1: #F4B23F;   /* fairy lights  — music, mixing, gigs */
@@ -121,7 +121,7 @@ section:last-of-type { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
   font-size: clamp(1.25rem, 2.4vw, 1.85rem); line-height: 1.4;
   max-width: 30ch; color: var(--light); margin-bottom: 0.9rem;
 }
-.hero-sub { color: var(--dim); max-width: 54ch; font-size: 1rem; }
+.hero-sub { color: var(--light); max-width: 54ch; font-size: 1.02rem; }
 
 .hero-canvas-wrap { position: relative; }
 .hero-controls {
@@ -205,10 +205,11 @@ section:last-of-type { padding-bottom: clamp(2.5rem, 5vw, 4rem); }
 .contact-grid a:hover { color: var(--band-2); }
 .big-mail {
   font-family: var(--display); font-weight: 700;
-  font-size: clamp(1.4rem, 4.5vw, 3.2rem); letter-spacing: -0.03em;
-  text-decoration: none; display: inline-block; margin-bottom: 1.5rem;
-  word-break: break-word;
+  font-size: clamp(1.5rem, 4.2vw, 2.9rem); letter-spacing: -0.03em;
+  text-decoration: none; display: inline-block; margin-bottom: 2.2rem;
+  word-break: break-word; color: var(--band-1);
 }
+.big-mail:hover { color: var(--light); }
 .big-mail:hover { color: var(--band-1); }
 
 footer { padding: 2.5rem 0 0; border-top: 1px solid var(--line); color: var(--faint); font-size: 0.85rem; }
@@ -382,7 +383,11 @@ footer .credit { margin-bottom: 0.8rem; }
 
 /* ─── the EQ across the top ───────────────────────────────────── */
 #eq { display: block; width: 100%; height: clamp(130px, 21vh, 250px); touch-action: manipulation; }
-.eq-hint { margin: 0.3rem 0 0 var(--gutter); font-size: 0.78rem; color: var(--faint); font-style: italic; }
+.eq-hint {
+  margin: 0.55rem 0 0 var(--gutter);
+  font-size: 0.92rem; color: var(--dim); max-width: 60ch;
+}
+.eq-hint strong { color: var(--band-1); font-weight: 600; }
 .transport { font-family: var(--display); }
 .now-playing { font-size: 0.8rem; color: var(--faint); font-style: italic; }
 .now-playing a { color: inherit; }
@@ -464,6 +469,28 @@ footer .credit { margin-bottom: 0.8rem; }
 .pp-track.is-on { color: var(--band-1); }
 .pp-seek { width: 100%; accent-color: var(--band-1); cursor: pointer; }
 .pp-time { margin: 0.35rem 0 0; font-size: 0.72rem; color: var(--faint); font-style: italic; }
+
+/* ─── nudging the first-time visitor ──────────────────────────── */
+.player-nudge {
+  font-family: var(--display); font-size: 0.78rem; font-weight: 600;
+  color: var(--band-1); background: color-mix(in oklab, var(--stage-lift) 92%, transparent);
+  border: 1px solid color-mix(in oklab, var(--band-1) 40%, transparent);
+  border-radius: 999px; padding: 0.35rem 0.8rem; white-space: nowrap;
+  align-self: flex-end;
+}
+.player-dock.has-played .player-nudge { display: none; }
+.player-dock:not(.has-played) .player { animation: nudge 2.6s ease-in-out infinite; }
+@keyframes nudge {
+  0%, 70%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--band-1) 45%, transparent); }
+  35%           { box-shadow: 0 0 0 10px color-mix(in oklab, var(--band-1) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .player-dock:not(.has-played) .player { animation: none; }
+}
+
+/* ─── contact ─────────────────────────────────────────────────── */
+.contact-head { font-size: clamp(1.5rem, 2.6vw, 2rem) !important; }
+.contact-lead { color: var(--dim); margin: 0 0 0.6rem; }
 
 /* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
    Everything here overrides rules defined above it. Add new base rules

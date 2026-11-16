@@ -36,6 +36,7 @@
   ];
 
   var track = 0, audio = null, ac = null, analyser = null, filters = [], bins = null;
+  var gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   var playing = false, hover = -1;
 
   /* ── geometry ───────────────────────────────────────────────── */
@@ -80,7 +81,7 @@
       f.type = b.type;
       f.frequency.value = b.f;
       f.Q.value = b.q;
-      f.gain.value = 0;
+      f.gain.value = gains[BANDS.indexOf(b)] || 0;
       node.connect(f);
       node = f;
       return f;
@@ -150,7 +151,7 @@
   function nearest(x, y) {
     var best = -1, bestDist = 1e9;
     BANDS.forEach(function (b, i) {
-      var gain = filters.length ? filters[i].gain.value : 0;
+      var gain = gains[i];
       var dx = xOf(b.f) - x, dy = yOf(gain) - (y === undefined ? yOf(gain) : y);
       var d = Math.sqrt(dx * dx + dy * dy * 0.35);
       if (d < bestDist) { bestDist = d; best = i; }
@@ -163,12 +164,18 @@
     return Math.max(-MAX_GAIN, Math.min(MAX_GAIN, db));
   }
   function setGain(i, db, glide) {
+    gains[i] = db;
     if (!filters.length) return;
     var g = filters[i].gain;
     g.cancelScheduledValues(ac.currentTime);
-    g.setValueAtTime(g.value, ac.currentTime);
-    if (glide) g.linearRampToValueAtTime(db, ac.currentTime + 0.12);
-    else g.setValueAtTime(db, ac.currentTime);
+    if (glide && ac.state === 'running') {
+      g.setValueAtTime(g.value, ac.currentTime);
+      g.linearRampToValueAtTime(db, ac.currentTime + 0.12);
+    } else {
+      /* a suspended context never renders, so a ramp would hang at the old
+         value — write it straight in instead */
+      g.value = db;
+    }
   }
 
   var dragging = -1, dragMoved = false, current = 'flat';
@@ -200,7 +207,7 @@
     if (dragging < 0) return;
     if (!dragMoved) {
       /* a tap with no movement toggles the band */
-      var cur = filters[dragging].gain.value;
+      var cur = gains[dragging];
       setGain(dragging, Math.abs(cur) < 0.5 ? MAX_GAIN : 0, true);
     }
     dragging = -1;
@@ -249,7 +256,7 @@
 
   function composite() {
     for (var i = 0; i < CURVE_N; i++) total[i] = 1;
-    if (!filters.length) return total;
+    if (!filters.length) return total;   /* nothing built yet: a flat line */
     filters.forEach(function (f) {
       f.getFrequencyResponse(curveF, magOut, phaseOut);
       for (var i = 0; i < CURVE_N; i++) total[i] *= magOut[i];
@@ -310,7 +317,7 @@
 
     /* band handles */
     BANDS.forEach(function (b, i) {
-      var gain = filters.length ? filters[i].gain.value : 0;
+      var gain = gains[i];
       var x = xOf(b.f), y = yOf(Math.max(-DB, Math.min(DB, gain)));
       var lit = Math.abs(gain) > 0.5, on = hover === i;
       ctx.beginPath();

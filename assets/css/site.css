@@ -428,3 +428,11 @@ footer .credit { margin-bottom: 0.8rem; }
 .exp-links a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
 .exp-links a:hover { color: var(--light); border-bottom-color: var(--band-2); }
 .exp-second { margin-top: clamp(2.5rem, 6vw, 4rem) !important; }
+
+/* ─── highlighted words in the statement ──────────────────────── */
+.hl { color: var(--tone); }
+.hl-ml   { --tone: var(--band-6); }
+.hl-dsp  { --tone: var(--band-4); }
+.hl-jazz { --tone: var(--band-1); }
+.statement-body a { color: var(--light); text-decoration-color: color-mix(in oklab, var(--band-2) 65%, transparent); }
+.statement-body a:hover { color: var(--band-1); text-decoration-color: var(--band-1); }

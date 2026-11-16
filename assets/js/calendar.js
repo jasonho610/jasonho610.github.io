@@ -92,8 +92,10 @@
       when.appendChild(el('span', 'date', dateLabel(e)));
       when.appendChild(el('span', 'meta', e.tbc ? 'date to confirm' : ''));
     }
-    li.appendChild(when);
+    li.appendChild(side);
 
+    var side = el('div', 'entry-side');
+    side.appendChild(when);
     if (e.poster) {
       var pa = el('a', 'poster');
       pa.href = e.venueUrl || e.poster;
@@ -102,7 +104,7 @@
       pi.alt = 'Poster for ' + e.title;
       pi.loading = 'lazy';
       pa.appendChild(pi);
-      when.appendChild(pa);
+      side.appendChild(pa);
     }
 
     var body = el('div', 'entry-body');
@@ -228,4 +230,19 @@
 
   list('upcoming', upcoming, 'Nothing coming up yet.');
   list('past', past, 'Nothing here yet.');
+
+  /* the back catalogue is long — keep it folded until asked for */
+  var toggle = document.querySelector('.played-toggle');
+  var pastHost = document.getElementById('past');
+  if (toggle && pastHost) {
+    var count = past.length;
+    var open = false;
+    function render() {
+      pastHost.hidden = !open;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.textContent = open ? 'hide' : 'show all ' + count;
+    }
+    toggle.addEventListener('click', function () { open = !open; render(); });
+    render();
+  }
 })();

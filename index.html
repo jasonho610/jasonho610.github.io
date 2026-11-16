@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=18">
+<link rel="stylesheet" href="assets/css/site.css?v=19">
 </head>
 <body>
 
@@ -44,17 +44,20 @@
     <p class="hero-sub">Audio DSP and ML. Jazz Saxophonist.</p>
 
     <div class="hero-controls">
-      <button class="transport" type="button" aria-pressed="false">
-        <span class="dot" aria-hidden="true"></span><span class="label">play</span>
-      </button>
-      <button class="eq-reset" type="button">flat</button>
+      <div class="presets">
+        <button type="button" data-preset="flat" class="is-on">flat</button>
+        <button type="button" data-preset="warm">warm</button>
+        <button type="button" data-preset="bright">bright</button>
+        <button type="button" data-preset="smile">smile</button>
+        <button type="button" data-preset="telephone">telephone</button>
+      </div>
       <span class="now-playing"></span>
     </div>
   </div>
 
   <div class="hero-canvas-wrap">
     <canvas id="eq" aria-label="Ten-band equaliser with a live analyser. Click a band to boost it."></canvas>
-    <p class="eq-hint">ten bands, 30 Hz to 16 kHz — click one to boost it</p>
+    <p class="eq-hint">ten bands, 30 Hz to 16 kHz, ±12 dB — drag a band, or tap it</p>
   </div>
 </header>
 
@@ -122,6 +125,7 @@
         <div>
           <h4>Lead tenor, Equal To One Jazz Orchestra</h4>
           <p>Resident big band at Blue Note Taipei, playing the first Saturday of every month.</p>
+          <p class="exp-links"><a href="https://www.bluenotetaipei.com/events/tai-bei-lan-diao-shou-zhou-zhou-liu-te-yan-xiao-jiu-guan-li-de-da-le-tuan-8">The residency</a> · <a href="https://www.bluenotetaipei.com/venue">Blue Note Taipei</a></p>
         </div>
       </li>
       <li>
@@ -129,6 +133,7 @@
         <div>
           <h4>Tenor saxophone and session work</h4>
           <p>Uno Kaoru Quartet, Jazz Meta Band, and my own quintet. Regular nights at Blue Note Taipei and Sappho Live Jazz.</p>
+          <p class="exp-links"><a href="https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-liu-te-yan-wu-ye-xun-si-zhong-zou-2026-11-14-21-30">Uno Kaoru Quartet</a> · <a href="https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-wu-te-yan-bian-xing-chong-jue-shi-le-tuan-2026-11-13-21-30">Jazz Meta Band</a> · <a href="https://www.sappholive.com/">Sappho Live Jazz</a></p>
         </div>
       </li>
       <li>
@@ -143,6 +148,7 @@
         <div>
           <h4>“Lover’s Ring” — Daniel Chen</h4>
           <p>Featured soloist on <em>The Sea, The Sky, The You and I</em>, nominated for Best Jazz Album at the Golden Indie Music Awards.</p>
+          <p class="exp-links"><a href="https://www.youtube.com/watch?v=x-SSC1PWwac">Listen to “Lover’s Ring”</a> · <a href="https://youtube.com/playlist?list=PL3nLPO4Yq7kbm4WJv8oV7LjJ6uVndO4-8">The whole album</a></p>
         </div>
       </li>
     </ul>
@@ -210,8 +216,14 @@
 </main>
 </div>
 
-<script src="assets/js/events.js?v=18"></script>
-<script src="assets/js/calendar.js?v=18"></script>
-<script src="assets/js/stage.js?v=18"></script>
+<button class="player" type="button" aria-pressed="false" aria-label="Play music">
+  <span class="sr">Play music</span>
+  <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+  <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.2v14H7zm6.8 0H17v14h-3.2z"/></svg>
+</button>
+
+<script src="assets/js/events.js?v=19"></script>
+<script src="assets/js/calendar.js?v=19"></script>
+<script src="assets/js/stage.js?v=19"></script>
 </body>
 </html>

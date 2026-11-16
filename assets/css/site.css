@@ -416,12 +416,6 @@ footer .credit { margin-bottom: 0.8rem; }
 #eq { display: block; width: 100%; height: clamp(130px, 21vh, 250px); touch-action: manipulation; }
 .eq-hint { margin: 0.3rem 0 0 var(--gutter); font-size: 0.78rem; color: var(--faint); font-style: italic; }
 .transport { font-family: var(--display); }
-.eq-reset {
-  font-family: var(--display); font-size: 0.8rem; font-weight: 600;
-  color: var(--faint); background: none; border: 1px solid var(--line);
-  border-radius: 999px; padding: 0.45rem 0.9rem; cursor: pointer;
-}
-.eq-reset:hover { color: var(--light); border-color: var(--band-2); }
 .now-playing { font-size: 0.8rem; color: var(--faint); font-style: italic; }
 .now-playing a { color: inherit; }
 .exp-links { font-family: var(--display); font-size: 0.82rem; font-weight: 600; color: var(--faint); margin-top: 0.45rem !important; }
@@ -436,3 +430,45 @@ footer .credit { margin-bottom: 0.8rem; }
 .hl-jazz { --tone: var(--band-1); }
 .statement-body a { color: var(--light); text-decoration-color: color-mix(in oklab, var(--band-2) 65%, transparent); }
 .statement-body a:hover { color: var(--band-1); text-decoration-color: var(--band-1); }
+
+/* ─── presets and the floating player ─────────────────────────── */
+.presets { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.presets button {
+  font-family: var(--display); font-size: 0.78rem; font-weight: 600;
+  color: var(--faint); background: none; border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.4rem 0.85rem; cursor: pointer;
+  transition: color .18s ease, border-color .18s ease;
+}
+.presets button:hover { color: var(--light); border-color: var(--band-2); }
+.presets button.is-on { color: var(--stage); background: var(--band-1); border-color: var(--band-1); }
+
+.player {
+  position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 60; width: 3.1rem; height: 3.1rem; border-radius: 50%;
+  display: grid; place-items: center; cursor: pointer;
+  background: color-mix(in oklab, var(--stage) 86%, transparent);
+  border: 1px solid var(--line); color: var(--dim);
+  backdrop-filter: blur(8px);
+  transition: color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.player:hover { color: var(--light); border-color: var(--band-1); transform: scale(1.06); }
+.player svg { width: 1.3rem; height: 1.3rem; fill: currentColor; grid-area: 1 / 1; }
+.player .ico-pause { display: none; }
+.player.is-playing { color: var(--band-1); border-color: color-mix(in oklab, var(--band-1) 55%, transparent); }
+.player.is-playing .ico-play { display: none; }
+.player.is-playing .ico-pause { display: block; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ─── calendar: poster beside the date, and a foldable back catalogue ── */
+.entry-side { display: flex; align-items: flex-start; gap: 1rem; }
+.entry-side .entry-when { flex: none; min-width: 5.5rem; }
+.entry-side .poster { margin-top: 0.15rem; }
+.entry-side .poster img { max-width: 8rem; }
+
+.played-head { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.played-toggle {
+  font-family: var(--display); font-size: 0.8rem; font-weight: 600;
+  color: var(--faint); background: none; border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.35rem 0.85rem; cursor: pointer;
+}
+.played-toggle:hover { color: var(--light); border-color: var(--band-1); }

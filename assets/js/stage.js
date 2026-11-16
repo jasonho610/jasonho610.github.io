@@ -12,7 +12,7 @@
   if (!canvas || !canvas.getContext) return;
   var ctx = canvas.getContext('2d');
 
-  var F_MIN = 20, F_MAX = 20000, DB = 18, MAX_GAIN = 15;
+  var F_MIN = 20, F_MAX = 20000, DB = 14, MAX_GAIN = 12;
 
   var BANDS = [
     { type: 'lowshelf',  f: 30,    q: 4.0,  color: '#F4B23F', label: '30' },
@@ -101,8 +101,8 @@
   }
 
   /* ── transport ──────────────────────────────────────────────── */
-  var button = document.querySelector('.transport');
-  var label = button && button.querySelector('.label');
+  var button = document.querySelector('.player');
+  var label = button && button.querySelector('.sr');
   var nowPlaying = document.querySelector('.now-playing');
 
   function describe() {
@@ -128,7 +128,8 @@
     }).then(function () {
       playing = true;
       if (button) { button.classList.add('is-playing'); button.setAttribute('aria-pressed', 'true'); }
-      if (label) label.textContent = 'pause';
+      if (label) label.textContent = 'Pause music';
+      if (button) button.setAttribute('aria-label', 'Pause music');
       describe();
     }).catch(pause);
   }
@@ -136,41 +137,93 @@
     playing = false;
     if (audio) audio.pause();
     if (button) { button.classList.remove('is-playing'); button.setAttribute('aria-pressed', 'false'); }
-    if (label) label.textContent = 'play';
+    if (label) label.textContent = 'Play music';
+    if (button) button.setAttribute('aria-label', 'Play music');
   }
   if (button) button.addEventListener('click', function () { playing ? pause() : play(); });
 
-  /* ── clicking a band boosts it, for real ────────────────────── */
-  function nearest(x) {
+  /* ── bands can be dragged, or clicked to toggle ─────────────── */
+  function nearest(x, y) {
     var best = -1, bestDist = 1e9;
     BANDS.forEach(function (b, i) {
-      var d = Math.abs(xOf(b.f) - x);
+      var gain = filters.length ? filters[i].gain.value : 0;
+      var dx = xOf(b.f) - x, dy = yOf(gain) - (y === undefined ? yOf(gain) : y);
+      var d = Math.sqrt(dx * dx + dy * dy * 0.35);
       if (d < bestDist) { bestDist = d; best = i; }
     });
-    return bestDist < 36 ? best : -1;
+    return bestDist < 44 ? best : -1;
   }
-  canvas.addEventListener('pointermove', function (e) {
-    hover = nearest(e.clientX - canvas.getBoundingClientRect().left);
-    canvas.style.cursor = hover >= 0 ? 'pointer' : 'default';
-  });
-  canvas.addEventListener('pointerleave', function () { hover = -1; });
-  canvas.addEventListener('click', function (e) {
-    var i = nearest(e.clientX - canvas.getBoundingClientRect().left);
-    if (i < 0) return;
-    if (!ac && !build()) return;
+  function gainAt(y) {
+    var top = PAD_T, bot = H - PAD_B;
+    var db = ((bot - y) / (bot - top)) * (DB * 2) - DB;
+    return Math.max(-MAX_GAIN, Math.min(MAX_GAIN, db));
+  }
+  function setGain(i, db, glide) {
+    if (!filters.length) return;
     var g = filters[i].gain;
-    var target = Math.abs(g.value) < 0.5 ? MAX_GAIN : 0;
     g.cancelScheduledValues(ac.currentTime);
     g.setValueAtTime(g.value, ac.currentTime);
-    g.linearRampToValueAtTime(target, ac.currentTime + 0.18);
+    if (glide) g.linearRampToValueAtTime(db, ac.currentTime + 0.12);
+    else g.setValueAtTime(db, ac.currentTime);
+  }
+
+  var dragging = -1, dragMoved = false;
+
+  function local(e) {
+    var r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  canvas.addEventListener('pointerdown', function (e) {
+    if (!ac && !build()) return;
+    var p = local(e);
+    var i = nearest(p.x, p.y);
+    if (i < 0) return;
+    dragging = i; dragMoved = false;
+    canvas.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
-  var reset = document.querySelector('.eq-reset');
-  if (reset) reset.addEventListener('click', function () {
-    if (!ac) return;
-    filters.forEach(function (f) {
-      f.gain.cancelScheduledValues(ac.currentTime);
-      f.gain.setValueAtTime(f.gain.value, ac.currentTime);
-      f.gain.linearRampToValueAtTime(0, ac.currentTime + 0.18);
+  canvas.addEventListener('pointermove', function (e) {
+    var p = local(e);
+    if (dragging >= 0) {
+      dragMoved = true;
+      setGain(dragging, gainAt(p.y), false);
+      return;
+    }
+    hover = nearest(p.x, p.y);
+    canvas.style.cursor = hover >= 0 ? 'ns-resize' : 'default';
+  });
+  function endDrag(e) {
+    if (dragging < 0) return;
+    if (!dragMoved) {
+      /* a tap with no movement toggles the band */
+      var cur = filters[dragging].gain.value;
+      setGain(dragging, Math.abs(cur) < 0.5 ? MAX_GAIN : 0, true);
+    }
+    dragging = -1;
+    if (e && e.pointerId !== undefined && canvas.hasPointerCapture(e.pointerId)) {
+      canvas.releasePointerCapture(e.pointerId);
+    }
+  }
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+  canvas.addEventListener('pointerleave', function () { if (dragging < 0) hover = -1; });
+
+  /* ── presets ────────────────────────────────────────────────── */
+  var PRESETS = {
+    'flat':      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    'warm':      [4, 3, 2, 1, 0, -1, -2, -3, -2, -3],
+    'bright':    [-3, -2, -2, -1, 0, 1, 2, 3, 4, 4],
+    'smile':     [5, 4, 2, 0, -2, -3, -1, 2, 4, 5],
+    'telephone': [-12, -10, -6, 2, 5, 6, 4, -2, -8, -12]
+  };
+  Array.prototype.slice.call(document.querySelectorAll('[data-preset]')).forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (!ac && !build()) return;
+      var p = PRESETS[btn.getAttribute('data-preset')];
+      if (!p) return;
+      p.forEach(function (db, i) { setGain(i, db, true); });
+      document.querySelectorAll('[data-preset]').forEach(function (b) { b.classList.remove('is-on'); });
+      btn.classList.add('is-on');
     });
   });
 
@@ -292,17 +345,37 @@
 (function () {
   var links = Array.prototype.slice.call(document.querySelectorAll('[data-nav] a'));
   if (!links.length || !('IntersectionObserver' in window)) return;
-  var map = {};
+
+  var watched = [];
   links.forEach(function (a) {
     var id = a.getAttribute('data-watch') ||
              (a.getAttribute('href').charAt(0) === '#' ? a.getAttribute('href').slice(1) : null);
-    if (!id || !document.getElementById(id)) return;
-    (map[id] = map[id] || []).push(a);
+    var el = id && document.getElementById(id);
+    if (!el) return;
+    var entry = watched.filter(function (w) { return w.el === el; })[0];
+    if (entry) entry.links.push(a);
+    else watched.push({ el: el, links: [a], visible: false });
   });
+  if (!watched.length) return;
+
+  function refresh() {
+    /* when a block sits inside a section, the inner one wins — so the
+       calendar link lights up instead of work, not alongside it */
+    var live = watched.filter(function (w) { return w.visible; });
+    var winner = null;
+    live.forEach(function (w) {
+      if (!winner || w.el.offsetHeight < winner.el.offsetHeight) winner = w;
+    });
+    watched.forEach(function (w) {
+      w.links.forEach(function (a) { a.classList.toggle('is-active', w === winner); });
+    });
+  }
+
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
-      (map[e.target.id] || []).forEach(function (a) { a.classList.toggle('is-active', e.isIntersecting); });
+      watched.forEach(function (w) { if (w.el === e.target) w.visible = e.isIntersecting; });
     });
+    refresh();
   }, { rootMargin: '-45% 0px -50% 0px' });
-  Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+  watched.forEach(function (w) { io.observe(w.el); });
 })();

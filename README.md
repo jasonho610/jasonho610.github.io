@@ -31,9 +31,12 @@ python3 -m http.server 8787
 A real ten-band equaliser, laid out like the one in BIAS X: a low shelf at 30 Hz (Q 4), eight peaks
 an octave apart from 60 Hz to 8 kHz (Q 1.5), a high shelf at 16 kHz (Q 4), ±15 dB.
 
-Left alone it shows the music moving through the analyser. Click a band and that band really is
-boosted — the Web Audio biquads change, the curve redraws from `getFrequencyResponse`, and you hear
-it. Click again, or press **flat**, to return to 0 dB.
+Left alone it shows the music moving through the analyser. Drag a band up or down and the Web Audio
+biquad really changes — the curve redraws from `getFrequencyResponse` and you hear it. A tap with no
+drag toggles that band between 0 and +12 dB. The preset buttons set all ten at once; edit `PRESETS`
+in `stage.js` to change them.
+
+Note the range here is ±12 dB. `FxEQ10Mod.cpp` uses ±15.
 
 To change the bands, edit the `BANDS` array at the top of `assets/js/stage.js`.
 
@@ -87,7 +90,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=18`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=19`. **Bump that
 number in every HTML file whenever you change CSS or JS.**
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules

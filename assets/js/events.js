@@ -18,11 +18,6 @@ var BLUE_NOTE = 'https://www.bluenotetaipei.com';
 
 window.EVENTS = [
   {
-    date: '2027', kind: 'conference', tbc: true,
-    title: 'ICASSP 2027',
-    note: 'If MixJudge is accepted. Dates and city still to confirm.'
-  },
-  {
     repeat: 'first-saturday', kind: 'gig',
     title: 'Sing Sang Sung with ETO',
     venue: 'Blue Note Taipei',

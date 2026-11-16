@@ -26,6 +26,14 @@ window.EVENTS = [
     note: 'A big band in a small bar. Three hours with the ETO Jazz Big Band, swapping between full band and smaller combos. Doors at 8, music at 9.'
   },
   {
+    date: '2026-11-20', kind: 'gig',
+    title: 'Jones Project',
+    venue: 'Riff Bar, Taipei',
+    venueUrl: 'https://riffbarlivejazz.netlify.app/',
+    poster: 'https://riffbarlivejazz.netlify.app/photos/riff/202602_Riff_0015.jpg',
+    note: 'Modern jazz with drummer Jones Lin and friends — a different line-up every Friday at Riff Bar. 21:00 to 23:00, doors at 20:00.'
+  },
+  {
     date: '2026-11-29', kind: 'gig',
     title: 'Tenor Showdown! — JHQ ft. Iming Lin',
     venue: 'Blue Note Taipei',

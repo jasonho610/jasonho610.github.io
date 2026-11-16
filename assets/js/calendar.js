@@ -92,8 +92,6 @@
       when.appendChild(el('span', 'date', dateLabel(e)));
       when.appendChild(el('span', 'meta', e.tbc ? 'date to confirm' : ''));
     }
-    li.appendChild(side);
-
     var side = el('div', 'entry-side');
     side.appendChild(when);
     if (e.poster) {
@@ -106,6 +104,7 @@
       pa.appendChild(pi);
       side.appendChild(pa);
     }
+    li.appendChild(side);
 
     var body = el('div', 'entry-body');
     body.appendChild(el('h3', null, e.title));

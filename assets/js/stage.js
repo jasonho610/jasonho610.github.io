@@ -118,8 +118,14 @@
 
   function play() {
     if (!ac && !build()) return;
-    if (ac.state === 'suspended') ac.resume();
-    audio.play().then(function () {
+    /* The element is wired into the graph, so it will not start while the
+       context is still suspended — resume first, then play, or the promise
+       simply hangs and nothing happens. */
+    var ready = ac.state === 'suspended' ? ac.resume() : Promise.resolve();
+    ready.then(function () {
+      audio.preload = 'auto';
+      return audio.play();
+    }).then(function () {
       playing = true;
       if (button) { button.classList.add('is-playing'); button.setAttribute('aria-pressed', 'true'); }
       if (label) label.textContent = 'pause';

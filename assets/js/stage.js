@@ -480,9 +480,11 @@
     tick();
   }
 
-  /* resume if the music was playing on the previous page; browsers block this
-     until the visitor has interacted with the site, so it is best effort */
-  play();
+  /* Carry the previous page's state across. If the music was paused there,
+     leave it paused — arriving on the calendar should never start sound the
+     visitor just stopped. With no stored state at all this is a first visit,
+     so it is worth an attempt the browser will usually refuse anyway. */
+  if (!saved || saved.playing !== false) play();
 })();
 
 /* ── the rail follows what you are reading ──────────────────────

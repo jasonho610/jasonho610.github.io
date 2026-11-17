@@ -528,9 +528,19 @@
     var on = verbOn;
     if (irInfo && irInfo.env.length) {
       var env = irInfo.env, n = env.length, peak = irInfo.peak || 1;
+
+      /* How much of this tail reaches the output is the wet mix, so it is
+         drawn as presence — the fill fades in and the outline brightens.
+         Height is left alone: that is the response itself, and the same
+         response must not look like a different one at a different mix. */
+      var presence = on ? Math.max(0, Math.min(1, verbMix)) : 0;
+      var fillTop = 0.08 + presence * 0.57;
+      var lineA   = 0.35 + presence * 0.65;
+
       var grad = verbCtx.createLinearGradient(0, pad, 0, base);
-      grad.addColorStop(0, on ? 'rgba(79,188,228,0.55)' : 'rgba(214,197,174,0.18)');
-      grad.addColorStop(1, 'rgba(79,188,228,0.03)');
+      grad.addColorStop(0, on ? 'rgba(79,188,228,' + fillTop.toFixed(3) + ')'
+                              : 'rgba(214,197,174,0.10)');
+      grad.addColorStop(1, 'rgba(79,188,228,0.02)');
       verbCtx.beginPath();
       verbCtx.moveTo(0, base);
       for (var i = 0; i < n; i++) {
@@ -539,7 +549,8 @@
       verbCtx.lineTo(w, base);
       verbCtx.fillStyle = grad;
       verbCtx.fill();
-      verbCtx.strokeStyle = on ? '#4FBCE4' : 'rgba(214,197,174,0.35)';
+      verbCtx.strokeStyle = on ? 'rgba(79,188,228,' + lineA.toFixed(3) + ')'
+                               : 'rgba(214,197,174,0.35)';
       verbCtx.lineWidth = 1.4;
       verbCtx.stroke();
     }

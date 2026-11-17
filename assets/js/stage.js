@@ -540,8 +540,8 @@
       var wet = on ? Math.max(0, Math.min(1, verbMix)) : 0;
       var t = Math.max(0, Math.min(1, (wet - 0.15) / 0.40));
       var presence = t * t * (3 - 2 * t);
-      var fillTop = 0.08 + presence * 0.57;
-      var lineA   = 0.35 + presence * 0.65;
+      var fillTop = 0.025 + presence * 0.625;
+      var lineA   = 0.18 + presence * 0.82;
 
       var grad = verbCtx.createLinearGradient(0, pad, 0, base);
       grad.addColorStop(0, on ? 'rgba(79,188,228,' + fillTop.toFixed(3) + ')'

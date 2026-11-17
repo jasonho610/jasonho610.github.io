@@ -12,7 +12,7 @@
   var hasEQ = !!(canvas && canvas.getContext);
   var ctx = hasEQ ? canvas.getContext('2d') : null;
 
-  var F_MIN = 20, F_MAX = 20000, DB = 14, MAX_GAIN = 12;
+  var F_MIN = 20, F_MAX = 30000, DB = 14, MAX_GAIN = 12;
 
   var BANDS = [
     { type: 'lowshelf',  f: 30,    q: 4.0,  color: '#F4B23F', label: '30' },
@@ -60,8 +60,8 @@
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    PAD_L = W * 0.07;
-    PAD_R = W * 0.10;
+    PAD_L = W * 0.04;
+    PAD_R = W * 0.03;
     PLOT = W - PAD_L - PAD_R;
   }
   var logMin = Math.log(F_MIN), logSpan = Math.log(F_MAX) - logMin;

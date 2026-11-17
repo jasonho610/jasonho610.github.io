@@ -478,16 +478,20 @@ footer .credit { margin-bottom: 0.8rem; }
   border-bottom: 1px solid var(--line);
   margin-right: var(--gutter);           /* never past the on-stage box */
 }
-.unit { background: var(--stage); padding: 0.8rem clamp(0.9rem, 2vw, 1.4rem) 0.9rem; min-width: 0; }
+.unit { background: var(--stage); padding: 0.8rem clamp(0.9rem, 2vw, 1.4rem) 0.9rem; min-width: 0; position: relative; }
 .unit-eq { padding-left: var(--gutter); }
 
-.unit-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.4rem; }
+.unit-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.4rem; }
 .unit-head h2 { font-family: var(--display); font-size: 0.92rem; font-weight: 600; color: var(--dim); letter-spacing: 0; }
 .unit.is-off .unit-head h2 { color: var(--faint); }
+/* the switch belongs on the graphic it switches, in every unit */
 .bypass {
+  position: absolute; top: 0.7rem; right: clamp(0.9rem, 2vw, 1.4rem); z-index: 2;
   font-family: var(--display); font-size: 0.7rem; font-weight: 600;
-  background: none; border: 1px solid var(--line); border-radius: 999px;
+  background: color-mix(in oklab, var(--stage) 80%, transparent);
+  border: 1px solid var(--line); border-radius: 999px;
   padding: 0.18rem 0.6rem; cursor: pointer; color: var(--faint);
+  backdrop-filter: blur(4px);
 }
 .bypass[aria-pressed="true"] { color: var(--stage); background: var(--band-1); border-color: var(--band-1); }
 .unit canvas { display: block; width: 100%; height: clamp(110px, 17vh, 190px); touch-action: none; cursor: ns-resize; }
@@ -495,6 +499,10 @@ footer .credit { margin-bottom: 0.8rem; }
 .unit-hint { margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--dim); }
 .unit-eq .unit-hint { font-size: 0.88rem; }
 .unit .presets { margin-top: 0.6rem; }
+.unit-trem .presets, .unit-verb .presets { flex-wrap: nowrap; gap: 0.3rem; }
+.unit-trem .presets button, .unit-verb .presets button {
+  font-size: 0.68rem; padding: 0.3rem 0.5rem; flex: 0 1 auto; min-width: 0;
+}
 
 /* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
    Everything here overrides rules defined above it. Add new base rules

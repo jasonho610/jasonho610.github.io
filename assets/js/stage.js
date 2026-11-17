@@ -389,6 +389,7 @@
   }
 
   var dragging = -1, dragMoved = false, current = 'flat';
+  var dragFromY = 0, dragFromGain = 0;
 
   function local(e) {
     var r = canvas.getBoundingClientRect();
@@ -401,6 +402,7 @@
     var i = nearest(p.x, p.y);
     if (i < 0) return;
     dragging = i; dragMoved = false;
+    dragFromY = p.y; dragFromGain = gains[i];   /* move from here, not to here */
     canvas.setPointerCapture(e.pointerId);
     e.preventDefault();
   });
@@ -408,7 +410,10 @@
     var p = local(e);
     if (dragging >= 0) {
       dragMoved = true;
-      setGain(dragging, gainAt(p.y), false);
+      var span = (H - PAD_B) - PAD_T;
+      var perPixel = (DB * 2) / Math.max(1, span);
+      var db = dragFromGain + (dragFromY - p.y) * perPixel;
+      setGain(dragging, Math.max(-MAX_GAIN, Math.min(MAX_GAIN, db)), false);
       e.preventDefault();            /* on a phone, drag the band — not the page */
       return;
     }
@@ -549,12 +554,18 @@
   }
 
   /* dragging either panel: across sets the main parameter, up sets the amount */
-  function panelDrag(cv, box, onMove) {
+  function panelDrag(cv, box, read, onMove) {
     if (!cv) return;
-    var down = false;
+    var down = false, fromX = 0, fromY = 0, baseX = 0, baseY = 0;
     cv.addEventListener('pointerdown', function (e) {
       if (!ac && !build()) return;
-      down = true; cv.setPointerCapture(e.pointerId); move(e); e.preventDefault();
+      down = true;
+      var r = cv.getBoundingClientRect();
+      fromX = e.clientX; fromY = e.clientY;
+      var v = read();
+      baseX = v[0]; baseY = v[1];           /* carry on from the present setting */
+      cv.setPointerCapture(e.pointerId);
+      e.preventDefault();
     });
     cv.addEventListener('pointermove', function (e) { if (down) { move(e); e.preventDefault(); } });
     function end(e) {
@@ -566,18 +577,19 @@
     cv.addEventListener('pointercancel', end);
     function move(e) {
       var r = cv.getBoundingClientRect();
-      var x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
-      var y = 1 - Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+      var x = clamp01(baseX + (e.clientX - fromX) / r.width);
+      var y = clamp01(baseY - (e.clientY - fromY) / r.height);
       onMove(x, y);
     }
   }
+  function clamp01(v) { return Math.max(0, Math.min(1, v)); }
 
-  panelDrag(tremCv, tremBox, function (x, y) {
+  panelDrag(tremCv, tremBox, function () { return [tremRate, tremDepth]; }, function (x, y) {
     tremRate = x; tremDepth = y;
     if (!tremOn) { tremOn = true; markUnit('trem', true); }
     applyTrem(); save();
   });
-  panelDrag(verbCv, verbBox, function (x, y) {
+  panelDrag(verbCv, verbBox, function () { return [verbRoomTarget, verbMixTarget]; }, function (x, y) {
     verbRoomTarget = x; verbMixTarget = y;
     if (!verbOn) { verbOn = true; markUnit('verb', true); }
     save();

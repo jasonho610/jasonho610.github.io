@@ -835,6 +835,12 @@
     tick();
   }
 
+  /* Build the graph straight away, even if nothing is going to play. The
+     context starts suspended and makes no sound, but the filters and the
+     impulse response exist, so the panels draw the real thing rather than
+     sitting empty until someone presses play. */
+  if (!ac) build();
+
   /* Carry the previous page's state across. If the music was paused there,
      leave it paused — arriving on the calendar should never start sound the
      visitor just stopped. With no stored state at all this is a first visit,

@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=33">
+<link rel="stylesheet" href="assets/css/site.css?v=34">
 </head>
 <body>
 
@@ -56,11 +56,11 @@
       </header>
       <canvas id="eq" aria-label="Ten-band equaliser. Drag a band to boost or cut it."></canvas>
       <div class="presets">
-        <button type="button" data-preset="flat" class="is-on">flat</button>
-        <button type="button" data-preset="warm">warm</button>
-        <button type="button" data-preset="bright">bright</button>
-        <button type="button" data-preset="smile">smile</button>
-        <button type="button" data-preset="telephone">telephone</button>
+        <button type="button" data-preset="flat" data-unit="eq" data-choice="flat" class="is-on">flat</button>
+        <button type="button" data-preset="warm" data-unit="eq" data-choice="warm">warm</button>
+        <button type="button" data-preset="bright" data-unit="eq" data-choice="bright">bright</button>
+        <button type="button" data-preset="smile" data-unit="eq" data-choice="smile">smile</button>
+        <button type="button" data-preset="telephone" data-unit="eq" data-choice="telephone">telephone</button>
       </div>
       <p class="unit-hint">Ten bands, 30 Hz to 16 kHz, ±12 dB. Drag one; double-click to reset it.</p>
     </section>
@@ -71,6 +71,12 @@
         <button type="button" class="bypass" data-bypass="trem" aria-pressed="false">off</button>
       </header>
       <canvas id="trem" aria-label="Tremolo. Drag across for rate, up for depth."></canvas>
+      <div class="presets">
+        <button type="button" data-unit="trem" data-choice="gentle">gentle</button>
+        <button type="button" data-unit="trem" data-choice="classic">classic</button>
+        <button type="button" data-unit="trem" data-choice="fast">fast</button>
+        <button type="button" data-unit="trem" data-choice="deep">deep</button>
+      </div>
       <p class="unit-hint">The gain, wobbling. Drag across for rate, up for depth.</p>
     </section>
 
@@ -80,6 +86,11 @@
         <button type="button" class="bypass" data-bypass="verb" aria-pressed="false">off</button>
       </header>
       <canvas id="verb" aria-label="Reverb. Drag across for decay, up for wet mix."></canvas>
+      <div class="presets">
+        <button type="button" data-unit="verb" data-choice="room">room</button>
+        <button type="button" data-unit="verb" data-choice="hall">hall</button>
+        <button type="button" data-unit="verb" data-choice="cavern">cavern</button>
+      </div>
       <p class="unit-hint">The tail you are about to hear. Drag across for decay, up for wet.</p>
     </section>
   </div>
@@ -243,9 +254,9 @@
 </div>
 
 
-<script src="assets/js/events.js?v=33"></script>
-<script src="assets/js/calendar.js?v=33"></script>
-<script src="assets/js/fx.js?v=33"></script>
-<script src="assets/js/stage.js?v=33"></script>
+<script src="assets/js/events.js?v=34"></script>
+<script src="assets/js/calendar.js?v=34"></script>
+<script src="assets/js/fx.js?v=34"></script>
+<script src="assets/js/stage.js?v=34"></script>
 </body>
 </html>

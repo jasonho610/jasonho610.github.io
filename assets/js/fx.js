@@ -121,8 +121,24 @@ window.FX = (function () {
      the rate — which is exactly what an oscillator into a gain param gives. */
   function tremoloRate(x) { return 0.1 + 2.4 * Math.max(0, Math.min(1, x)); }
 
+  /* Generating a response costs real time, so quantise the control and keep
+     what we build. Dragging then reuses buffers instead of rebuilding. */
+  var cache = {};
+  var STEPS = 14;
+  function quantise(x) { return Math.round(Math.max(0, Math.min(1, x)) * (STEPS - 1)); }
+  function cachedIR(ac, room, damp) {
+    var key = quantise(room) + ':' + quantise(damp) + ':' + ac.sampleRate;
+    if (cache[key]) return cache[key];
+    var ir = buildIR(ac, quantise(room) / (STEPS - 1), quantise(damp) / (STEPS - 1));
+    if (ir) cache[key] = ir;
+    return ir;
+  }
+
   return {
     buildIR: buildIR,
+    cachedIR: cachedIR,
+    quantise: quantise,
+    STEPS: STEPS,
     envelope: envelope,
     tremoloRate: tremoloRate,
     MAX_SECONDS: MAX_SECONDS

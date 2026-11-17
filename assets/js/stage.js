@@ -42,9 +42,12 @@
   var eqOn = true;
   var tremOn = false, tremRate = 0.75, tremDepth = 0.6;
   var verbOn = false, verbRoom = 0.45, verbMix = 0.3, verbDamp = 0.5;
+  /* the control the drag writes, and the value the audio actually follows —
+     the same one-pole smoother the plugin uses: x += (target - x) * 0.1 */
+  var verbRoomTarget = 0.45, verbMixTarget = 0.3;
+  var convA = null, convB = null, fadeA = null, fadeB = null, activeConv = 'A', loadedBucket = -1;
   var trem = null, lfo = null, lfoAmt = null;
-  var convolver = null, dryGain = null, wetGain = null, irInfo = null;
-  var irTimer = null;
+  var dryGain = null, wetGain = null, irInfo = null;
   var playing = false, hover = -1;
 
   /* ── geometry ───────────────────────────────────────────────── */
@@ -110,9 +113,12 @@
     lfo.start();
 
     /* reverb: Freeverb rendered once into an impulse response, then convolved.
-       No feedback path exists at playback, so there is nothing to run away. */
-    convolver = ac.createConvolver();
-    convolver.normalize = true;
+       No feedback path exists at playback, so there is nothing to run away.
+       Two convolvers so a change of decay can be crossfaded instead of cut. */
+    convA = ac.createConvolver(); convA.normalize = true;
+    convB = ac.createConvolver(); convB.normalize = true;
+    fadeA = ac.createGain(); fadeA.gain.value = 1;
+    fadeB = ac.createGain(); fadeB.gain.value = 0;
     var guard = ac.createDynamicsCompressor();   /* belt and braces on the wet bus */
     guard.threshold.value = -6;
     guard.ratio.value = 12;
@@ -121,15 +127,15 @@
     dryGain.gain.value = 1;
     wetGain.gain.value = 0;
     node.connect(dryGain);
-    node.connect(convolver);
-    convolver.connect(guard);
+    node.connect(convA); convA.connect(fadeA); fadeA.connect(guard);
+    node.connect(convB); convB.connect(fadeB); fadeB.connect(guard);
     guard.connect(wetGain);
     var sum = ac.createGain();
     dryGain.connect(sum);
     wetGain.connect(sum);
     node = sum;
 
-    rebuildIR();
+    rebuildIR(true);
     applyTrem();
     applyVerb();
 
@@ -159,17 +165,40 @@
     dryGain.gain.setTargetAtTime(Math.cos(m * Math.PI / 2), ac.currentTime, 0.03);
   }
 
-  /* rebuilding the response is the expensive part, so never do it mid-drag */
-  function rebuildIR() {
-    if (!ac || !convolver) return;
-    var ir = FX.buildIR(ac, verbRoom, verbDamp);
+  /* Swap the response only when the smoothed control crosses into a new step,
+     and crossfade the two convolvers so the tail is never cut mid-flight. */
+  function rebuildIR(force) {
+    if (!ac || !convA) return;
+    var bucket = FX.quantise(verbRoom);
+    if (!force && bucket === loadedBucket) return;
+    var ir = FX.cachedIR(ac, verbRoom, verbDamp);
     if (!ir) return;                      /* refused: keep what is already loaded */
-    convolver.buffer = ir;
+    loadedBucket = bucket;
     irInfo = FX.envelope(ir, 220);
+    var incoming = activeConv === 'A' ? convB : convA;
+    var inFade   = activeConv === 'A' ? fadeB : fadeA;
+    var outFade  = activeConv === 'A' ? fadeA : fadeB;
+    incoming.buffer = ir;
+    var t = ac.currentTime, dur = 0.12;
+    inFade.gain.cancelScheduledValues(t);
+    outFade.gain.cancelScheduledValues(t);
+    inFade.gain.setValueAtTime(inFade.gain.value, t);
+    outFade.gain.setValueAtTime(outFade.gain.value, t);
+    inFade.gain.linearRampToValueAtTime(1, t + dur);
+    outFade.gain.linearRampToValueAtTime(0, t + dur);
+    activeConv = activeConv === 'A' ? 'B' : 'A';
   }
-  function rebuildIRSoon() {
-    clearTimeout(irTimer);
-    irTimer = setTimeout(rebuildIR, 140);
+  function rebuildIRSoon() { rebuildIR(false); }
+
+  /* called every frame: ease the value towards where the drag put it */
+  function smoothVerb() {
+    var before = FX.quantise(verbRoom);
+    verbRoom += (verbRoomTarget - verbRoom) * 0.1;
+    verbMix  += (verbMixTarget  - verbMix)  * 0.1;
+    if (Math.abs(verbRoomTarget - verbRoom) < 0.002) verbRoom = verbRoomTarget;
+    if (Math.abs(verbMixTarget - verbMix) < 0.002) verbMix = verbMixTarget;
+    if (FX.quantise(verbRoom) !== before) rebuildIR(false);
+    applyVerb();
   }
 
   function next() {
@@ -287,7 +316,7 @@
         playing: playing,
         gains: gains,
         rack: { eqOn: eqOn, tremOn: tremOn, tremRate: tremRate, tremDepth: tremDepth,
-                verbOn: verbOn, verbRoom: verbRoom, verbMix: verbMix }
+                verbOn: verbOn, verbRoom: verbRoomTarget, verbMix: verbMixTarget }
       }));
     } catch (e) {}
   }
@@ -380,6 +409,7 @@
     if (dragging >= 0) {
       dragMoved = true;
       setGain(dragging, gainAt(p.y), false);
+      e.preventDefault();            /* on a phone, drag the band — not the page */
       return;
     }
     hover = nearest(p.x, p.y);
@@ -526,7 +556,7 @@
       if (!ac && !build()) return;
       down = true; cv.setPointerCapture(e.pointerId); move(e); e.preventDefault();
     });
-    cv.addEventListener('pointermove', function (e) { if (down) move(e); });
+    cv.addEventListener('pointermove', function (e) { if (down) { move(e); e.preventDefault(); } });
     function end(e) {
       if (!down) return;
       down = false;
@@ -548,9 +578,9 @@
     applyTrem(); save();
   });
   panelDrag(verbCv, verbBox, function (x, y) {
-    verbRoom = x; verbMix = y;
+    verbRoomTarget = x; verbMixTarget = y;
     if (!verbOn) { verbOn = true; markUnit('verb', true); }
-    applyVerb(); rebuildIRSoon(); save();
+    save();
   });
 
   function markUnit(name, on) {
@@ -570,6 +600,47 @@
       if (which === 'trem') { tremOn = !tremOn; markUnit('trem', tremOn); applyTrem(); }
       if (which === 'verb') { verbOn = !verbOn; markUnit('verb', verbOn); applyVerb(); }
       save();
+    });
+  });
+
+  /* ── presets for the other two units ────────────────────────── */
+  var TREM_PRESETS = {               /* rate 0…1 maps to 0.1 + 2.4x Hz */
+    gentle:  [0.22, 0.35],
+    classic: [0.55, 0.60],
+    fast:    [1.00, 0.70],
+    deep:    [0.40, 1.00]
+  };
+  var VERB_PRESETS = {               /* room, wet */
+    room:    [0.18, 0.20],
+    hall:    [0.55, 0.30],
+    cavern:  [1.00, 0.42]
+  };
+
+  function markPreset(unit, name) {
+    document.querySelectorAll('[data-unit="' + unit + '"]').forEach(function (b) {
+      b.classList.toggle('is-on', b.getAttribute('data-choice') === name);
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-unit="trem"]'), function (btn) {
+    btn.addEventListener('click', function () {
+      if (!ac && !build()) return;
+      var p = TREM_PRESETS[btn.getAttribute('data-choice')];
+      if (!p) return;
+      tremRate = p[0]; tremDepth = p[1];
+      if (!tremOn) { tremOn = true; markUnit('trem', true); }
+      applyTrem(); markPreset('trem', btn.getAttribute('data-choice')); save();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-unit="verb"]'), function (btn) {
+    btn.addEventListener('click', function () {
+      if (!ac && !build()) return;
+      var p = VERB_PRESETS[btn.getAttribute('data-choice')];
+      if (!p) return;
+      verbRoomTarget = p[0]; verbMixTarget = p[1];
+      if (!verbOn) { verbOn = true; markUnit('verb', true); }
+      markPreset('verb', btn.getAttribute('data-choice')); save();
     });
   });
 
@@ -614,7 +685,7 @@
   var onScreen = true, ticking = false;
 
   function frame() {
-    if (!hasEQ) { drawTrem(); drawVerb(); schedule(); return; }
+    if (!hasEQ) { smoothVerb(); drawTrem(); drawVerb(); schedule(); return; }
     ctx.clearRect(0, 0, W, H);
 
     /* 0 dB line and frequency ticks */
@@ -690,6 +761,7 @@
       }
     });
 
+    smoothVerb();
     drawTrem();
     drawVerb();
     schedule();
@@ -719,8 +791,8 @@
       verbOn = !!saved.rack.verbOn;
       if (typeof saved.rack.tremRate === 'number') tremRate = saved.rack.tremRate;
       if (typeof saved.rack.tremDepth === 'number') tremDepth = saved.rack.tremDepth;
-      if (typeof saved.rack.verbRoom === 'number') verbRoom = saved.rack.verbRoom;
-      if (typeof saved.rack.verbMix === 'number') verbMix = saved.rack.verbMix;
+      if (typeof saved.rack.verbRoom === 'number') verbRoom = verbRoomTarget = saved.rack.verbRoom;
+      if (typeof saved.rack.verbMix === 'number') verbMix = verbMixTarget = saved.rack.verbMix;
     }
   }
   describe();

@@ -40,11 +40,11 @@
 
   /* the rack: three units, each independently bypassable */
   var eqOn = true;
-  var tremOn = false, tremRate = 0.75, tremDepth = 0.6;
-  var verbOn = false, verbRoom = 0.45, verbMix = 0.3, verbDamp = 0.5;
+  var tremOn = true, tremRate = 0.35, tremDepth = 0.4;
+  var verbOn = true, verbRoom = 0.40, verbMix = 0.32, verbDamp = 0.5;
   /* the control the drag writes, and the value the audio actually follows —
      the same one-pole smoother the plugin uses: x += (target - x) * 0.1 */
-  var verbRoomTarget = 0.45, verbMixTarget = 0.3;
+  var verbRoomTarget = 0.40, verbMixTarget = 0.32;
   var convA = null, convB = null, fadeA = null, fadeB = null, activeConv = 'A', loadedBucket = -1;
   var trem = null, lfo = null, lfoAmt = null;
   var dryGain = null, wetGain = null, irInfo = null;
@@ -533,7 +533,13 @@
          drawn as presence — the fill fades in and the outline brightens.
          Height is left alone: that is the response itself, and the same
          response must not look like a different one at a different mix. */
-      var presence = on ? Math.max(0, Math.min(1, verbMix)) : 0;
+      /* A straight ramp wasted most of its range on mixes nobody uses. This
+         is flat below a fifth, steep from there to a half, then eases off —
+         so the part of the control people actually move is the part that
+         visibly changes. */
+      var wet = on ? Math.max(0, Math.min(1, verbMix)) : 0;
+      var t = Math.max(0, Math.min(1, (wet - 0.15) / 0.40));
+      var presence = t * t * (3 - 2 * t);
       var fillTop = 0.08 + presence * 0.57;
       var lineA   = 0.35 + presence * 0.65;
 

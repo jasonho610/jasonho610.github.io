@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=44">
+<link rel="stylesheet" href="assets/css/site.css?v=45">
 </head>
 <body>
 
@@ -68,10 +68,10 @@
       <p class="unit-hint">Ten bands, 30 Hz to 16 kHz, ±12 dB. Drag one; double-click to reset it.</p>
     </section>
 
-    <section class="unit unit-trem is-off">
+    <section class="unit unit-trem">
       <header class="unit-head">
         <h2>Tremolo</h2>
-        <button type="button" class="bypass" data-bypass="trem" aria-pressed="false">off</button>
+        <button type="button" class="bypass" data-bypass="trem" aria-pressed="true">on</button>
       </header>
       <div class="graphic">
         <canvas id="trem" aria-label="Tremolo. Drag across for rate, up for depth."></canvas>
@@ -84,10 +84,10 @@
       <p class="unit-hint">The gain, wobbling. Drag across for rate, up for depth.</p>
     </section>
 
-    <section class="unit unit-verb is-off">
+    <section class="unit unit-verb">
       <header class="unit-head">
         <h2>Reverb</h2>
-        <button type="button" class="bypass" data-bypass="verb" aria-pressed="false">off</button>
+        <button type="button" class="bypass" data-bypass="verb" aria-pressed="true">on</button>
       </header>
       <div class="graphic">
         <canvas id="verb" aria-label="Reverb. Drag across for decay, up for wet mix."></canvas>
@@ -260,9 +260,9 @@
 </div>
 
 
-<script src="assets/js/events.js?v=44"></script>
-<script src="assets/js/calendar.js?v=44"></script>
-<script src="assets/js/fx.js?v=44"></script>
-<script src="assets/js/stage.js?v=44"></script>
+<script src="assets/js/events.js?v=45"></script>
+<script src="assets/js/calendar.js?v=45"></script>
+<script src="assets/js/fx.js?v=45"></script>
+<script src="assets/js/stage.js?v=45"></script>
 </body>
 </html>

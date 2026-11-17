@@ -466,6 +466,14 @@ footer .credit { margin-bottom: 0.8rem; }
 .contact-head { font-size: clamp(1.5rem, 2.6vw, 2rem) !important; }
 .contact-lead { color: var(--dim); margin: 0 0 0.6rem; }
 
+/* ─── a note about tickets ────────────────────────────────────── */
+.ticket-note {
+  margin: 0 0 clamp(1.4rem, 3vw, 2rem);
+  padding: 0.7rem 0 0.7rem 1rem;
+  border-left: 2px solid var(--band-1);
+  color: var(--dim); font-size: 0.95rem; max-width: 62ch;
+}
+
 /* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
    Everything here overrides rules defined above it. Add new base rules
    ABOVE this block, never below, or they will quietly win on mobile. */

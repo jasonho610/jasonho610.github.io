@@ -31,7 +31,8 @@ window.EVENTS = [
     venue: 'Riff Bar, Taipei',
     venueUrl: 'https://riffbarlivejazz.netlify.app/',
     poster: 'https://riffbarlivejazz.netlify.app/photos/riff/202602_Riff_0015.jpg',
-    note: 'Modern jazz with drummer Jones Lin and friends — a different line-up every Friday at Riff Bar. 21:00 to 23:00, doors at 20:00.'
+    note: 'Modern jazz with drummer Jones Lin and friends — a different line-up every Friday at Riff Bar. With Lee Yi-An on guitar and Potter Huang on bass. 21:00 to 23:00, doors at 20:00. No cover; two-drink minimum, cash only.',
+    links: [{ label: 'The announcement', url: 'https://www.instagram.com/p/Dfz7ISoD-tF/' }]
   },
   {
     date: '2026-11-29', kind: 'gig',

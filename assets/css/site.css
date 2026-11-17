@@ -205,7 +205,7 @@ section:last-of-type { padding-bottom: clamp(2rem, 4vw, 3rem); }
 .contact-grid a:hover { color: var(--band-2); }
 .big-mail {
   font-family: var(--display); font-weight: 700;
-  font-size: clamp(1.5rem, 4.2vw, 2.9rem); letter-spacing: -0.03em;
+  font-size: clamp(1.5rem, 2.6vw, 2rem); letter-spacing: -0.03em;
   text-decoration: none; display: inline-block; margin-bottom: 2.2rem;
   word-break: break-word; color: var(--band-1);
 }
@@ -500,6 +500,7 @@ footer .credit { margin-bottom: 0.8rem; }
 }
 .bypass[aria-pressed="true"] { color: var(--stage); background: var(--band-1); border-color: var(--band-1); }
 .unit canvas { display: block; width: 100%; height: clamp(110px, 17vh, 190px); touch-action: none; cursor: ns-resize; }
+.unit-trem canvas, .unit-verb canvas { cursor: move; }   /* drag either way */
 .unit-eq canvas { cursor: default; }
 .unit-hint { margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--dim); }
 

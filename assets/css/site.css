@@ -210,7 +210,6 @@ section:last-of-type { padding-bottom: clamp(2rem, 4vw, 3rem); }
   word-break: break-word; color: var(--band-1);
 }
 .big-mail:hover { color: var(--light); }
-.big-mail:hover { color: var(--band-1); }
 
 footer { padding: 2.5rem 0 0; border-top: 1px solid var(--line); color: var(--dim); font-size: 0.85rem; }
 footer p { max-width: none; }

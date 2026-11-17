@@ -61,7 +61,7 @@
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     PAD_L = W * 0.04;
-    PAD_R = W * 0.03;
+    PAD_R = 0;
     PLOT = W - PAD_L - PAD_R;
   }
   var logMin = Math.log(F_MIN), logSpan = Math.log(F_MAX) - logMin;

@@ -540,13 +540,14 @@
       var wet = on ? Math.max(0, Math.min(1, verbMix)) : 0;
       var t = Math.max(0, Math.min(1, (wet - 0.15) / 0.40));
       var presence = t * t * (3 - 2 * t);
-      var fillTop = 0.025 + presence * 0.625;
+      var fillTop = 0.02 + presence * 0.42;
       var lineA   = 0.18 + presence * 0.82;
 
       var grad = verbCtx.createLinearGradient(0, pad, 0, base);
       grad.addColorStop(0, on ? 'rgba(79,188,228,' + fillTop.toFixed(3) + ')'
                               : 'rgba(214,197,174,0.10)');
       grad.addColorStop(1, 'rgba(79,188,228,0.02)');
+      /* A faint wash underneath carries the mix, the stems carry the shape. */
       verbCtx.beginPath();
       verbCtx.moveTo(0, base);
       for (var i = 0; i < n; i++) {
@@ -555,9 +556,20 @@
       verbCtx.lineTo(w, base);
       verbCtx.fillStyle = grad;
       verbCtx.fill();
+
+      /* An impulse response is energy arriving at instants, so draw it as
+         stems rather than a continuous curve. One stem every two pixels is as
+         fine as this panel can resolve — ten milliseconds of the tail each. */
+      verbCtx.beginPath();
+      for (var px = 0; px <= w; px += 2) {
+        var idx = Math.min(n - 1, Math.round((px / w) * (n - 1)));
+        var y = base - (env[idx] / peak) * (base - pad);
+        verbCtx.moveTo(px + 0.5, base);
+        verbCtx.lineTo(px + 0.5, y);
+      }
       verbCtx.strokeStyle = on ? 'rgba(79,188,228,' + lineA.toFixed(3) + ')'
                                : 'rgba(214,197,174,0.35)';
-      verbCtx.lineWidth = 1.4;
+      verbCtx.lineWidth = 1;
       verbCtx.stroke();
     }
 

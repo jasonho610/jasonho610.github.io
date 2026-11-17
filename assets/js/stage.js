@@ -37,6 +37,14 @@
 
   var track = 0, audio = null, ac = null, analyser = null, filters = [], bins = null;
   var gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  /* the rack: three units, each independently bypassable */
+  var eqOn = true;
+  var tremOn = false, tremRate = 0.75, tremDepth = 0.6;
+  var verbOn = false, verbRoom = 0.45, verbMix = 0.3, verbDamp = 0.5;
+  var trem = null, lfo = null, lfoAmt = null;
+  var convolver = null, dryGain = null, wetGain = null, irInfo = null;
+  var irTimer = null;
   var playing = false, hover = -1;
 
   /* ── geometry ───────────────────────────────────────────────── */
@@ -60,7 +68,7 @@
     var top = PAD_T, bot = H - PAD_B;
     return bot - ((db + DB) / (DB * 2)) * (bot - top);
   }
-  if (hasEQ) { resize(); window.addEventListener('resize', resize); }
+  function resizeAll() { if (hasEQ) resize(); sizePanel(tremCv, tremCtx, tremBox); sizePanel(verbCv, verbCtx, verbBox); }
 
   /* ── audio graph ────────────────────────────────────────────── */
   function build() {
@@ -86,6 +94,45 @@
       return f;
     });
 
+    /* tremolo: a gain stage wobbled by an oscillator */
+    trem = ac.createGain();
+    trem.gain.value = 1;
+    node.connect(trem);
+    node = trem;
+
+    lfo = ac.createOscillator();
+    lfo.type = 'sine';
+    lfo.frequency.value = FX.tremoloRate(tremRate) * 2;  /* cos² is a cosine at twice the rate */
+    lfoAmt = ac.createGain();
+    lfoAmt.gain.value = 0;
+    lfo.connect(lfoAmt);
+    lfoAmt.connect(trem.gain);
+    lfo.start();
+
+    /* reverb: Freeverb rendered once into an impulse response, then convolved.
+       No feedback path exists at playback, so there is nothing to run away. */
+    convolver = ac.createConvolver();
+    convolver.normalize = true;
+    var guard = ac.createDynamicsCompressor();   /* belt and braces on the wet bus */
+    guard.threshold.value = -6;
+    guard.ratio.value = 12;
+    dryGain = ac.createGain();
+    wetGain = ac.createGain();
+    dryGain.gain.value = 1;
+    wetGain.gain.value = 0;
+    node.connect(dryGain);
+    node.connect(convolver);
+    convolver.connect(guard);
+    guard.connect(wetGain);
+    var sum = ac.createGain();
+    dryGain.connect(sum);
+    wetGain.connect(sum);
+    node = sum;
+
+    rebuildIR();
+    applyTrem();
+    applyVerb();
+
     analyser = ac.createAnalyser();
     analyser.fftSize = 4096;
     analyser.smoothingTimeConstant = 0.76;
@@ -95,6 +142,34 @@
     analyser.connect(ac.destination);
     bins = new Uint8Array(analyser.frequencyBinCount);
     return true;
+  }
+
+  function applyTrem() {
+    if (!ac || !trem) return;
+    var d = tremOn ? tremDepth : 0;
+    lfo.frequency.setTargetAtTime(FX.tremoloRate(tremRate) * 2, ac.currentTime, 0.02);
+    trem.gain.setTargetAtTime(1 - d / 2, ac.currentTime, 0.02);
+    lfoAmt.gain.setTargetAtTime(-d / 2, ac.currentTime, 0.02);
+  }
+
+  function applyVerb() {
+    if (!ac || !wetGain) return;
+    var m = verbOn ? verbMix : 0;
+    wetGain.gain.setTargetAtTime(Math.sin(m * Math.PI / 2), ac.currentTime, 0.03);
+    dryGain.gain.setTargetAtTime(Math.cos(m * Math.PI / 2), ac.currentTime, 0.03);
+  }
+
+  /* rebuilding the response is the expensive part, so never do it mid-drag */
+  function rebuildIR() {
+    if (!ac || !convolver) return;
+    var ir = FX.buildIR(ac, verbRoom, verbDamp);
+    if (!ir) return;                      /* refused: keep what is already loaded */
+    convolver.buffer = ir;
+    irInfo = FX.envelope(ir, 220);
+  }
+  function rebuildIRSoon() {
+    clearTimeout(irTimer);
+    irTimer = setTimeout(rebuildIR, 140);
   }
 
   function next() {
@@ -210,7 +285,9 @@
         track: track,
         time: audio ? audio.currentTime : 0,
         playing: playing,
-        gains: gains
+        gains: gains,
+        rack: { eqOn: eqOn, tremOn: tremOn, tremRate: tremRate, tremDepth: tremDepth,
+                verbOn: verbOn, verbRoom: verbRoom, verbMix: verbMix }
       }));
     } catch (e) {}
   }
@@ -269,6 +346,7 @@
   function setGain(i, db, glide) {
     gains[i] = db;
     if (!filters.length) return;
+    if (!eqOn) db = 0;
     var g = filters[i].gain;
     g.cancelScheduledValues(ac.currentTime);
     if (glide && ac.state === 'running') {
@@ -333,6 +411,168 @@
   canvas.addEventListener('pointerleave', function () { if (dragging < 0) hover = -1; });
   }
 
+  function applyEQ() {
+    if (!filters.length) return;
+    filters.forEach(function (f, i) {
+      var v = eqOn ? gains[i] : 0;
+      f.gain.cancelScheduledValues(ac.currentTime);
+      f.gain.setTargetAtTime(v, ac.currentTime, 0.02);
+    });
+  }
+
+  /* ── the other two panels ───────────────────────────────────── */
+  var tremCv = document.getElementById('trem');
+  var verbCv = document.getElementById('verb');
+  var tremCtx = tremCv && tremCv.getContext ? tremCv.getContext('2d') : null;
+  var verbCtx = verbCv && verbCv.getContext ? verbCv.getContext('2d') : null;
+  var tremBox = { w: 0, h: 0 }, verbBox = { w: 0, h: 0 };
+
+  function sizePanel(cv, c, box) {
+    if (!c) return;
+    var r = cv.getBoundingClientRect();
+    box.w = r.width; box.h = r.height;
+    cv.width = Math.round(r.width * dpr);
+    cv.height = Math.round(r.height * dpr);
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function drawTrem() {
+    if (!tremCtx) return;
+    var w = tremBox.w, h = tremBox.h, pad = 10;
+    tremCtx.clearRect(0, 0, w, h);
+    var rate = FX.tremoloRate(tremRate);
+    var span = 2.2;                                   /* seconds across the panel */
+    var now = ac ? ac.currentTime : 0;
+    var mid = h / 2, amp = (h / 2 - pad) * 0.92;
+
+    tremCtx.strokeStyle = 'rgba(188,168,147,0.12)';
+    tremCtx.lineWidth = 1;
+    tremCtx.beginPath(); tremCtx.moveTo(0, mid); tremCtx.lineTo(w, mid); tremCtx.stroke();
+
+    /* gain = 1 - depth·cos²(2π·rate·t), drawn as it is heard */
+    var on = tremOn;
+    tremCtx.beginPath();
+    for (var px = 0; px <= w; px++) {
+      var t = (px / w) * span;
+      var c = Math.cos(2 * Math.PI * rate * t);
+      var g = 1 - (on ? tremDepth : 0) * c * c;
+      tremCtx.lineTo(px, mid + amp - g * amp);
+    }
+    tremCtx.strokeStyle = on ? '#F4B23F' : 'rgba(214,197,174,0.35)';
+    tremCtx.lineWidth = 1.8;
+    tremCtx.stroke();
+
+    if (on && playing) {                               /* where the music is in the cycle */
+      var ph = (now % span) / span * w;
+      var tt = (now % span);
+      var cc = Math.cos(2 * Math.PI * rate * tt);
+      var gg = 1 - tremDepth * cc * cc;
+      tremCtx.beginPath();
+      tremCtx.arc(ph, mid + amp - gg * amp, 4, 0, Math.PI * 2);
+      tremCtx.fillStyle = '#F4B23F';
+      tremCtx.fill();
+    }
+
+    tremCtx.font = '10px Newsreader, Georgia, serif';
+    tremCtx.fillStyle = 'rgba(160,139,116,0.9)';
+    tremCtx.textAlign = 'left';
+    tremCtx.fillText(rate.toFixed(2) + ' Hz', 2, h - 3);
+    tremCtx.textAlign = 'right';
+    tremCtx.fillText(Math.round(tremDepth * 100) + '% depth', w - 2, h - 3);
+  }
+
+  function drawVerb() {
+    if (!verbCtx) return;
+    var w = verbBox.w, h = verbBox.h, pad = 10;
+    verbCtx.clearRect(0, 0, w, h);
+    var base = h - pad - 8;
+
+    verbCtx.strokeStyle = 'rgba(188,168,147,0.12)';
+    verbCtx.lineWidth = 1;
+    verbCtx.beginPath(); verbCtx.moveTo(0, base); verbCtx.lineTo(w, base); verbCtx.stroke();
+
+    var on = verbOn;
+    if (irInfo && irInfo.env.length) {
+      var env = irInfo.env, n = env.length, peak = irInfo.peak || 1;
+      var grad = verbCtx.createLinearGradient(0, pad, 0, base);
+      grad.addColorStop(0, on ? 'rgba(79,188,228,0.55)' : 'rgba(214,197,174,0.18)');
+      grad.addColorStop(1, 'rgba(79,188,228,0.03)');
+      verbCtx.beginPath();
+      verbCtx.moveTo(0, base);
+      for (var i = 0; i < n; i++) {
+        verbCtx.lineTo((i / (n - 1)) * w, base - (env[i] / peak) * (base - pad));
+      }
+      verbCtx.lineTo(w, base);
+      verbCtx.fillStyle = grad;
+      verbCtx.fill();
+      verbCtx.strokeStyle = on ? '#4FBCE4' : 'rgba(214,197,174,0.35)';
+      verbCtx.lineWidth = 1.4;
+      verbCtx.stroke();
+    }
+
+    verbCtx.font = '10px Newsreader, Georgia, serif';
+    verbCtx.fillStyle = 'rgba(160,139,116,0.9)';
+    verbCtx.textAlign = 'left';
+    verbCtx.fillText(irInfo ? irInfo.rt60.toFixed(2) + ' s' : '—', 2, h - 3);
+    verbCtx.textAlign = 'right';
+    verbCtx.fillText(Math.round(verbMix * 100) + '% wet', w - 2, h - 3);
+  }
+
+  /* dragging either panel: across sets the main parameter, up sets the amount */
+  function panelDrag(cv, box, onMove) {
+    if (!cv) return;
+    var down = false;
+    cv.addEventListener('pointerdown', function (e) {
+      if (!ac && !build()) return;
+      down = true; cv.setPointerCapture(e.pointerId); move(e); e.preventDefault();
+    });
+    cv.addEventListener('pointermove', function (e) { if (down) move(e); });
+    function end(e) {
+      if (!down) return;
+      down = false;
+      if (e && e.pointerId !== undefined && cv.hasPointerCapture(e.pointerId)) cv.releasePointerCapture(e.pointerId);
+    }
+    cv.addEventListener('pointerup', end);
+    cv.addEventListener('pointercancel', end);
+    function move(e) {
+      var r = cv.getBoundingClientRect();
+      var x = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+      var y = 1 - Math.max(0, Math.min(1, (e.clientY - r.top) / r.height));
+      onMove(x, y);
+    }
+  }
+
+  panelDrag(tremCv, tremBox, function (x, y) {
+    tremRate = x; tremDepth = y;
+    if (!tremOn) { tremOn = true; markUnit('trem', true); }
+    applyTrem(); save();
+  });
+  panelDrag(verbCv, verbBox, function (x, y) {
+    verbRoom = x; verbMix = y;
+    if (!verbOn) { verbOn = true; markUnit('verb', true); }
+    applyVerb(); rebuildIRSoon(); save();
+  });
+
+  function markUnit(name, on) {
+    var btn = document.querySelector('[data-bypass="' + name + '"]');
+    if (!btn) return;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.textContent = on ? 'on' : 'off';
+    var unit = btn.closest('.unit');
+    if (unit) unit.classList.toggle('is-off', !on);
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-bypass]'), function (btn) {
+    btn.addEventListener('click', function () {
+      if (!ac && !build()) return;
+      var which = btn.getAttribute('data-bypass');
+      if (which === 'eq')   { eqOn = !eqOn;     markUnit('eq', eqOn);     applyEQ(); }
+      if (which === 'trem') { tremOn = !tremOn; markUnit('trem', tremOn); applyTrem(); }
+      if (which === 'verb') { verbOn = !verbOn; markUnit('verb', verbOn); applyVerb(); }
+      save();
+    });
+  });
+
   /* ── presets ────────────────────────────────────────────────── */
   var PRESETS = {
     'flat':      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -374,6 +614,7 @@
   var onScreen = true, ticking = false;
 
   function frame() {
+    if (!hasEQ) { drawTrem(); drawVerb(); schedule(); return; }
     ctx.clearRect(0, 0, W, H);
 
     /* 0 dB line and frequency ticks */
@@ -449,11 +690,13 @@
       }
     });
 
+    drawTrem();
+    drawVerb();
     schedule();
   }
 
   function schedule() {
-    if (!hasEQ || !onScreen) { ticking = false; return; }
+    if ((!hasEQ && !tremCtx) || !onScreen) { ticking = false; return; }
     ticking = true;
     requestAnimationFrame(frame);
   }
@@ -470,9 +713,21 @@
   if (saved) {
     if (typeof saved.track === 'number') track = saved.track % TRACKS.length;
     if (Array.isArray(saved.gains)) gains = saved.gains.slice(0, BANDS.length);
+    if (saved.rack) {
+      eqOn = saved.rack.eqOn !== false;
+      tremOn = !!saved.rack.tremOn;
+      verbOn = !!saved.rack.verbOn;
+      if (typeof saved.rack.tremRate === 'number') tremRate = saved.rack.tremRate;
+      if (typeof saved.rack.tremDepth === 'number') tremDepth = saved.rack.tremDepth;
+      if (typeof saved.rack.verbRoom === 'number') verbRoom = saved.rack.verbRoom;
+      if (typeof saved.rack.verbMix === 'number') verbMix = saved.rack.verbMix;
+    }
   }
   describe();
-  if (hasEQ) schedule();
+  resizeAll();
+  window.addEventListener('resize', resizeAll);
+  markUnit('eq', eqOn); markUnit('trem', tremOn); markUnit('verb', verbOn);
+  if (hasEQ || tremCtx) schedule();
   setInterval(tick, 250);
 
   if (saved && saved.time && build()) {

@@ -14,7 +14,8 @@ assets/js/events.js        THE calendar data — the only file to edit when a da
 assets/js/calendar.js      draws the year axis and the lists from events.js
 assets/audio/              the music files — see the README in that folder
 assets/css/site.css        every style on the site
-assets/js/stage.js         the ten-band EQ at the top of the page, the music, the rail highlighting
+assets/js/fx.js            the Freeverb impulse response generator and the tremolo maths
+assets/js/stage.js         the three-unit rack, the music, the rail highlighting
 scripts/check-calendar.js  renders the calendar headlessly — run it before every deploy
 assets/img/*.jpg           the one photograph on the site, behind the next date up
 assets/cv/*.pdf            the two CVs, offered as downloads from the page
@@ -100,7 +101,7 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=32`. **Bump that
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=33`. **Bump that
 number in every HTML file whenever you change CSS or JS.**
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules

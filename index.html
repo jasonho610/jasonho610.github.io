@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css?v=32">
+<link rel="stylesheet" href="assets/css/site.css?v=33">
 </head>
 <body>
 
@@ -44,6 +44,17 @@
     <p class="hero-sub">Audio DSP and ML. Jazz Saxophonist.</p>
 
     <div class="hero-controls">
+      <span class="now-playing"></span>
+    </div>
+  </div>
+
+  <div class="rack">
+    <section class="unit unit-eq">
+      <header class="unit-head">
+        <h2>Equaliser</h2>
+        <button type="button" class="bypass" data-bypass="eq" aria-pressed="true">on</button>
+      </header>
+      <canvas id="eq" aria-label="Ten-band equaliser. Drag a band to boost or cut it."></canvas>
       <div class="presets">
         <button type="button" data-preset="flat" class="is-on">flat</button>
         <button type="button" data-preset="warm">warm</button>
@@ -51,13 +62,26 @@
         <button type="button" data-preset="smile">smile</button>
         <button type="button" data-preset="telephone">telephone</button>
       </div>
-      <span class="now-playing"></span>
-    </div>
-  </div>
+      <p class="unit-hint">Ten bands, 30 Hz to 16 kHz, ±12 dB. Drag one; double-click to reset it.</p>
+    </section>
 
-  <div class="hero-canvas-wrap">
-    <canvas id="eq" aria-label="Ten-band equaliser with a live analyser. Click a band to boost it."></canvas>
-    <p class="eq-hint">This is a working ten-band EQ. <strong>Press play</strong>, then <strong>drag a band</strong> up or down to hear it. Double-click a band to put it back.</p>
+    <section class="unit unit-trem is-off">
+      <header class="unit-head">
+        <h2>Tremolo</h2>
+        <button type="button" class="bypass" data-bypass="trem" aria-pressed="false">off</button>
+      </header>
+      <canvas id="trem" aria-label="Tremolo. Drag across for rate, up for depth."></canvas>
+      <p class="unit-hint">The gain, wobbling. Drag across for rate, up for depth.</p>
+    </section>
+
+    <section class="unit unit-verb is-off">
+      <header class="unit-head">
+        <h2>Reverb</h2>
+        <button type="button" class="bypass" data-bypass="verb" aria-pressed="false">off</button>
+      </header>
+      <canvas id="verb" aria-label="Reverb. Drag across for decay, up for wet mix."></canvas>
+      <p class="unit-hint">The tail you are about to hear. Drag across for decay, up for wet.</p>
+    </section>
   </div>
 </header>
 
@@ -219,8 +243,9 @@
 </div>
 
 
-<script src="assets/js/events.js?v=32"></script>
-<script src="assets/js/calendar.js?v=32"></script>
-<script src="assets/js/stage.js?v=32"></script>
+<script src="assets/js/events.js?v=33"></script>
+<script src="assets/js/calendar.js?v=33"></script>
+<script src="assets/js/fx.js?v=33"></script>
+<script src="assets/js/stage.js?v=33"></script>
 </body>
 </html>

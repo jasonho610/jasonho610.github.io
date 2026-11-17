@@ -484,26 +484,25 @@
     tremCtx.lineWidth = 1;
     tremCtx.beginPath(); tremCtx.moveTo(0, mid); tremCtx.lineTo(w, mid); tremCtx.stroke();
 
-    /* gain = 1 - depth·cos²(2π·rate·t), drawn as it is heard */
+    /* The gain is 1 - depth·cos²(2π·rate·t), which swings about a mean of
+       1 - depth/2. Draw the swing around that mean, so deeper opens the shape
+       either side of the line instead of pushing it downwards. */
     var on = tremOn;
+    var dep = on ? tremDepth : 0;
     tremCtx.beginPath();
     for (var px = 0; px <= w; px++) {
       var t = (px / w) * span;
-      var c = Math.cos(2 * Math.PI * rate * t);
-      var g = 1 - (on ? tremDepth : 0) * c * c;
-      tremCtx.lineTo(px, mid + amp - g * amp);
+      tremCtx.lineTo(px, mid + amp * dep * Math.cos(4 * Math.PI * rate * t));
     }
     tremCtx.strokeStyle = on ? '#F4B23F' : 'rgba(214,197,174,0.35)';
     tremCtx.lineWidth = 1.8;
     tremCtx.stroke();
 
     if (on && playing) {                               /* where the music is in the cycle */
-      var ph = (now % span) / span * w;
-      var tt = (now % span);
-      var cc = Math.cos(2 * Math.PI * rate * tt);
-      var gg = 1 - tremDepth * cc * cc;
+      var tt = now % span;
+      var ph = tt / span * w;
       tremCtx.beginPath();
-      tremCtx.arc(ph, mid + amp - gg * amp, 4, 0, Math.PI * 2);
+      tremCtx.arc(ph, mid + amp * dep * Math.cos(4 * Math.PI * rate * tt), 4, 0, Math.PI * 2);
       tremCtx.fillStyle = '#F4B23F';
       tremCtx.fill();
     }

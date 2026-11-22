@@ -32,7 +32,9 @@
     { src: 'assets/audio/hard-bop-rainy-night.mp3', title: 'Hard Bop Rainy Night', artist: 'Alex Morgan',
       url: 'https://freemusicarchive.org/music/alex-morgan/moods-atmospheres-vol-4/hard-bop-rainy-night-bright-late-session/' },
     { src: 'assets/audio/too-cool-for-school.mp3', title: 'Too Cool for School', artist: 'NoKings XXX',
-      url: 'https://freemusicarchive.org/music/nokings-xxx/too-cool-for-school/too-cool-for-school/' }
+      url: 'https://freemusicarchive.org/music/nokings-xxx/too-cool-for-school/too-cool-for-school/' },
+    { src: 'assets/audio/dreamy-christmas-jazz.mp3', title: 'Dreamy Christmas Jazz', artist: 'PulseBox',
+      url: 'https://freemusicarchive.org/music/pulsebox/christmas-jazz-music/dreamy-christmas-jazz/' }
   ];
 
   var track = 0, audio = null, ac = null, analyser = null, filters = [], bins = null;

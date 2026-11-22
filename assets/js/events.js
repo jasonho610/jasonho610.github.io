@@ -26,6 +26,21 @@ window.EVENTS = [
     note: 'A big band in a small bar. Three hours with the ETO Jazz Big Band, swapping between full band and smaller combos. Doors at 8, music at 9.'
   },
   {
+    date: '2027-01-13', kind: 'conference',
+    title: 'ICASSP 2027 — notification',
+    note: 'Whether MixJudge got in.',
+    links: [{ label: 'arXiv:2610.30783', url: 'https://arxiv.org/abs/2610.30783' }]
+  },
+  {
+    date: '2026-12-23', kind: 'gig',
+    title: 'Christmas Swing with TJO',
+    venue: 'National Concert Hall, Taipei',
+    venueUrl: 'https://www.opentix.life/event/2097504190905114625',
+    poster: 'https://s3.resource.opentix.life/upload/program/1790087523521qiq9DV4Z2Q.jpeg',
+    note: 'Saxophone in the Taipei Jazz Orchestra under Li Cheng-Yu, with the Taipei Jazz Vocals — The Nutcracker, carols, and Mandarin standards swung. Uno Kaoru on piano, Daniel Chen on guitar. 19:30 to 21:30; NT$500–2,000.',
+    links: [{ label: 'The teaser', url: 'https://www.instagram.com/reel/DfZAK03k6XH/' }]
+  },
+  {
     date: '2026-11-20', kind: 'gig',
     title: 'Jones Project',
     venue: 'Riff Bar, Taipei',

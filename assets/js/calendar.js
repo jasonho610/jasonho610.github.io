@@ -161,6 +161,7 @@
     var next = upcoming.filter(function (e) { return !e.tbc; })[0] || upcoming[0];
     if (next) {
       var card = el('div', 'next kind-' + next.kind);
+      if (next.snow) card.classList.add('wants-snow');
       card.appendChild(el('p', 'next-label', 'Next up'));
       var big = el('p', 'next-date');
       big.appendChild(el('span', 'd', next.parsed.d !== null ? String(next.parsed.d) : ''));

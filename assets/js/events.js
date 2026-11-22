@@ -9,6 +9,7 @@
  *   note     optional one line — guests, subs, programme
  *   video    optional YouTube id, for a set that was recorded
  *   playlist optional YouTube playlist id, when a whole night was filmed
+ *   snow     true to let it snow over the card when this one is next up
  *   repeat   "first-saturday" for a residency — the next few dates are worked out for you
  *   links    optional [{ label, url }]
  *   tbc      true if the date is not confirmed
@@ -33,7 +34,7 @@ window.EVENTS = [
   },
   {
     date: '2026-12-23', kind: 'gig',
-    title: 'Christmas Swing with TJO',
+    title: 'Christmas Swing with TJO', snow: true,
     venue: 'National Concert Hall, Taipei',
     venueUrl: 'https://www.opentix.life/event/2097504190905114625',
     poster: 'https://s3.resource.opentix.life/upload/program/1790087523521qiq9DV4Z2Q.jpeg',

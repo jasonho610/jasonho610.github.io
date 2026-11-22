@@ -511,6 +511,14 @@ footer .credit { margin-bottom: 0.8rem; }
 .unit .presets { margin-top: 0.6rem; }
 .unit-trem .presets, .unit-verb .presets { flex-wrap: nowrap; }
 
+/* ─── snow, for the one gig that earns it ─────────────────────── */
+.snow {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1;
+  opacity: 0; transition: opacity 1.2s ease;
+}
+.snow.is-on { opacity: 1; }
+
 /* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
    Everything here overrides rules defined above it. Add new base rules
    ABOVE this block, never below, or they will quietly win on mobile. */

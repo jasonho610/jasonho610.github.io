@@ -299,6 +299,7 @@
 
   function describe() {
     markTrack();
+    window.__stageTrack = { title: TRACKS[track].title, playing: playing };
     if (!nowPlaying) return;
     var t = TRACKS[track];
     nowPlaying.innerHTML = '';
@@ -354,6 +355,7 @@
     button.setAttribute('aria-pressed', 'false');
     button.setAttribute('aria-label', 'Play music');
     label.textContent = 'Play music';
+    window.__stageTrack = { title: TRACKS[track].title, playing: false };
     save();
   }
   button.addEventListener('click', function () { playing ? pause() : play(); });
@@ -902,4 +904,88 @@
     refresh();
   }, { rootMargin: '-45% 0px -50% 0px' });
   watched.forEach(function (w) { io.observe(w.el); });
+})();
+
+/* ── snow ────────────────────────────────────────────────────────
+   Falls over the next-up card when that gig asks for it, and whenever the
+   Christmas track is the one playing. Sparse and slow on purpose: this is a
+   dusting, not a blizzard. Honours prefers-reduced-motion by settling. */
+(function () {
+  'use strict';
+
+  var card = document.querySelector('.next');
+  if (!card || !card.getContext && !document.createElement('canvas').getContext) return;
+
+  var cv = document.createElement('canvas');
+  cv.className = 'snow';
+  cv.setAttribute('aria-hidden', 'true');
+  card.appendChild(cv);
+  var ctx = cv.getContext('2d');
+  if (!ctx) return;
+
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var W = 0, H = 0, flakes = [];
+
+  function size() {
+    var r = card.getBoundingClientRect();
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var want = Math.round(W * H / 5200);          /* density, not a fixed count */
+    flakes = [];
+    for (var i = 0; i < want; i++) {
+      flakes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 0.7 + Math.random() * 1.9,
+        fall: 8 + Math.random() * 22,             /* px per second */
+        drift: (Math.random() - 0.5) * 14,
+        phase: Math.random() * Math.PI * 2,
+        a: 0.25 + Math.random() * 0.5
+      });
+    }
+  }
+  size();
+  window.addEventListener('resize', size);
+
+  function wanted() {
+    if (card.classList.contains('wants-snow')) return true;
+    var t = window.__stageTrack;                  /* set by the player */
+    return !!(t && t.playing && /christmas/i.test(t.title));
+  }
+
+  var last = 0, on = false;
+  function frame(now) {
+    var dt = Math.min(0.05, (now - last) / 1000 || 0);
+    last = now;
+
+    var want = wanted();
+    if (want !== on) { on = want; cv.classList.toggle('is-on', on); }
+
+    if (on) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#F4EADB';
+      for (var i = 0; i < flakes.length; i++) {
+        var f = flakes[i];
+        if (!still) {
+          f.y += f.fall * dt;
+          f.phase += dt * 0.8;
+          f.x += (f.drift + Math.sin(f.phase) * 6) * dt;
+          if (f.y - f.r > H) { f.y = -f.r; f.x = Math.random() * W; }
+          if (f.x < -4) f.x = W + 4; else if (f.x > W + 4) f.x = -4;
+        }
+        ctx.globalAlpha = f.a;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    } else if (W) {
+      ctx.clearRect(0, 0, W, H);
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();

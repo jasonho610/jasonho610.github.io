@@ -162,10 +162,10 @@
      next picture is only fetched a moment before its turn, so the page
      costs one image on arrival rather than four. */
   var STAGE_SHOTS = [
-    'assets/img/blue-note-stage.jpg?v=65',
-    'assets/img/stage-1.jpg?v=65',
-    'assets/img/stage-2.jpg?v=65',
-    'assets/img/stage-4.jpg?v=65'
+    'assets/img/blue-note-stage.jpg?v=66',
+    'assets/img/stage-1.jpg?v=66',
+    'assets/img/stage-2.jpg?v=66',
+    'assets/img/stage-4.jpg?v=66'
   ];
   var SHOT_HOLD = 7000;    /* ms each photograph stays */
 

@@ -279,7 +279,8 @@ footer .credit { margin-bottom: 0.8rem; }
     color-mix(in oklab, var(--stage) 48%, transparent) 100%);
 }
 @media (prefers-reduced-motion: reduce) { .next-bg i { transition: none; } }
-.next > * { max-width: 44ch; position: relative; text-shadow: 0 1px 14px color-mix(in oklab, var(--stage-deep) 85%, transparent); }
+/* :not(.next-bg) — the photo stack must keep its own absolute positioning */
+.next > *:not(.next-bg) { max-width: 44ch; position: relative; text-shadow: 0 1px 14px color-mix(in oklab, var(--stage-deep) 85%, transparent); }
 .next-label { font-family: var(--display); font-size: 0.85rem; font-weight: 600; color: var(--tone); margin-bottom: 0.9rem; }
 .next-date { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.7rem; }
 .next-date .d { font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 9vw, 5.5rem); line-height: 0.9; letter-spacing: -0.04em; }
@@ -552,7 +553,7 @@ footer .credit { margin-bottom: 0.8rem; }
       color-mix(in oklab, var(--stage) 62%, transparent) 72%,
       color-mix(in oklab, var(--stage) 24%, transparent) 100%);
   }
-  .next > * { max-width: none; }
+  .next > *:not(.next-bg) { max-width: none; }
 
   /* the calendar row collapses to one column, with the date on one line */
   .experience li { grid-template-columns: 1fr; gap: 0.35rem; }

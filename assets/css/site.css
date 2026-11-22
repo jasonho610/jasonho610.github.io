@@ -546,7 +546,6 @@ footer .credit { margin-bottom: 0.8rem; }
   /* the scrim has to follow the layout: on a narrow card the text spans the
      whole photo, so darken from the bottom rather than from the left */
   .next { min-height: 23rem; }
-  .next-bg i { background-position: 32% 50%; }
   .next::after {
     background-image: linear-gradient(to top,
       var(--stage) 0%,

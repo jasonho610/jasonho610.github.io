@@ -161,13 +161,17 @@
      Four nights at the Blue Note, cycling. Two layers crossfade, and the
      next picture is only fetched a moment before its turn, so the page
      costs one image on arrival rather than four. */
+  /* Each shot carries its own vertical framing. The card is a wide band and
+     most of these are 4:3 or taller, so centring them cuts the players' heads
+     off; the second number is how far down the photograph the band sits. */
   var STAGE_SHOTS = [
-    'assets/img/blue-note-stage.jpg?v=67',
-    'assets/img/stage-1.jpg?v=67',
-    'assets/img/stage-2.jpg?v=67',
-    'assets/img/stage-4.jpg?v=67'
+    { src: 'assets/img/blue-note-stage.jpg?v=68', pos: '50% 50%' },
+    { src: 'assets/img/stage-1.jpg?v=68',         pos: '50% 16%' },
+    { src: 'assets/img/stage-2.jpg?v=68',         pos: '50% 14%' },
+    { src: 'assets/img/stage-3.jpg?v=68',         pos: '50% 42%' },
+    { src: 'assets/img/stage-4.jpg?v=68',         pos: '50% 24%' }
   ];
-  var SHOT_HOLD = 7000;    /* ms each photograph stays */
+  var SHOT_HOLD = 10000;   /* ms each photograph stays */
 
   function stageBackdrop() {
     var bg = el('div', 'next-bg');
@@ -178,7 +182,8 @@
     var layers = [a, b], front = 0, i = 0, timer = null;
 
     function paint(n, layer) {
-      layer.style.backgroundImage = 'url("' + STAGE_SHOTS[n] + '")';
+      layer.style.backgroundImage = 'url("' + STAGE_SHOTS[n].src + '")';
+      layer.style.backgroundPosition = STAGE_SHOTS[n].pos;
     }
 
     paint(0, a); a.classList.add('on');
@@ -197,7 +202,7 @@
         layers[front].classList.remove('on');
         front = 1 - front;
       };
-      img.src = STAGE_SHOTS[i];
+      img.src = STAGE_SHOTS[i].src;
     }
 
     function start() { if (!timer) timer = setInterval(advance, SHOT_HOLD); }

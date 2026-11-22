@@ -160,7 +160,7 @@
   /* ── the photographs behind the card ──────────────────────────
      Four nights at the Blue Note, cycling. Two layers crossfade, and the
      next picture is only fetched a moment before its turn, so the page
-     costs one image on arrival rather than four. */
+     costs one image on arrival rather than five. */
   /* Each shot carries its own vertical framing. The card is a wide band and
      most of these are 4:3 or taller, so centring them cuts the players' heads
      off; the second number is how far down the photograph the band sits. */

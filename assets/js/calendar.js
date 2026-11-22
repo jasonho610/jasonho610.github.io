@@ -80,6 +80,7 @@
   function entry(e) {
     var li = el('li', 'entry kind-' + e.kind);
     li.id = idOf(e);
+    if (e.snow) li.classList.add('wants-snow');
     if (e.tbc) li.classList.add('is-tbc');
 
     var when = el('div', 'entry-when');

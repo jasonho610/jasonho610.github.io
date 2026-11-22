@@ -520,8 +520,10 @@ footer .credit { margin-bottom: 0.8rem; }
 }
 .snow.is-on { opacity: 1; }
 /* the row's own content stays above the weather */
-.entry.wants-snow > * { position: relative; z-index: 2; }
-.next > * { z-index: 2; }
+/* lift the row's own content above the weather — but not the canvas itself,
+   which must stay absolutely positioned or the grid will place it in a cell */
+.entry.wants-snow > *:not(.snow) { position: relative; z-index: 2; }
+.next > *:not(.snow) { z-index: 2; }
 
 /* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
    Everything here overrides rules defined above it. Add new base rules

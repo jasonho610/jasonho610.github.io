@@ -344,6 +344,11 @@ footer .credit { margin-bottom: 0.8rem; }
 .exp-when { font-family: var(--display); font-weight: 600; font-size: 0.9rem; color: var(--band-1); }
 .experience h4 { font-family: var(--display); font-weight: 700; font-size: 1.05rem; margin: 0 0 0.3rem; line-height: 1.25; }
 .experience p { color: var(--dim); font-size: 0.97rem; max-width: 62ch; margin: 0; }
+.experience h4 a { color: inherit; text-decoration-color: color-mix(in oklab, var(--band-1) 55%, transparent); text-underline-offset: 0.2em; }
+.experience h4 a:hover { color: var(--band-1); }
+.experience p a { color: var(--light); text-decoration-color: color-mix(in oklab, var(--band-2) 55%, transparent); }
+.experience p a:hover { color: var(--band-1); }
+
 .experience .more { margin-top: 1.1rem; font-family: var(--display); font-size: 0.88rem; font-weight: 600; color: var(--faint); }
 .experience .more a { color: var(--dim); text-decoration: none; border-bottom: 1px solid var(--line); }
 .experience .more a:hover { color: var(--light); border-bottom-color: var(--band-1); }

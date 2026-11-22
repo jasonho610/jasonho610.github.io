@@ -156,6 +156,65 @@
     host.appendChild(ul);
   }
 
+
+  /* ── the photographs behind the card ──────────────────────────
+     Four nights at the Blue Note, cycling. Two layers crossfade, and the
+     next picture is only fetched a moment before its turn, so the page
+     costs one image on arrival rather than four. */
+  var STAGE_SHOTS = [
+    'assets/img/blue-note-stage.jpg?v=65',
+    'assets/img/stage-1.jpg?v=65',
+    'assets/img/stage-2.jpg?v=65',
+    'assets/img/stage-4.jpg?v=65'
+  ];
+  var SHOT_HOLD = 7000;    /* ms each photograph stays */
+
+  function stageBackdrop() {
+    var bg = el('div', 'next-bg');
+    var a = document.createElement('i');
+    var b = document.createElement('i');
+    bg.appendChild(a); bg.appendChild(b);
+
+    var layers = [a, b], front = 0, i = 0, timer = null;
+
+    function paint(n, layer) {
+      layer.style.backgroundImage = 'url("' + STAGE_SHOTS[n] + '")';
+    }
+
+    paint(0, a); a.classList.add('on');
+
+    /* no rotation without a real image loader — the headless render check
+       has a stub DOM, and there is nothing to look at there anyway */
+    if (STAGE_SHOTS.length < 2 || typeof Image !== 'function') return bg;
+
+    function advance() {
+      i = (i + 1) % STAGE_SHOTS.length;
+      var back = layers[1 - front];
+      var img = new Image();
+      img.onload = img.onerror = function () {
+        paint(i, back);
+        back.classList.add('on');
+        layers[front].classList.remove('on');
+        front = 1 - front;
+      };
+      img.src = STAGE_SHOTS[i];
+    }
+
+    function start() { if (!timer) timer = setInterval(advance, SHOT_HOLD); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!still || !still.matches) start();
+
+    /* a background tab should not keep swapping pictures nobody is watching */
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop();
+      else if (!still || !still.matches) start();
+    });
+
+    return bg;
+  }
+
   /* ── the next one up ─────────────────────────────────────────── */
   var nextHost = document.getElementById('next-up');
   if (nextHost) {
@@ -163,6 +222,7 @@
     if (next) {
       var card = el('div', 'next kind-' + next.kind);
       if (next.snow) card.classList.add('wants-snow');
+      card.appendChild(stageBackdrop());
       card.appendChild(el('p', 'next-label', 'Next up'));
       var big = el('p', 'next-date');
       big.appendChild(el('span', 'd', next.parsed.d !== null ? String(next.parsed.d) : ''));

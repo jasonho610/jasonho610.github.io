@@ -256,23 +256,30 @@ footer .credit { margin-bottom: 0.8rem; }
   border: 1px solid var(--line);
   border-top: 2px solid var(--tone);
   padding: 1.7rem clamp(1.3rem, 3vw, 2.4rem) 2rem;
-  /* tall enough that the text sits in the lower band and the players' faces,
-     the pianist's especially, stay in clear air above it */
-  min-height: 32rem;
+  min-height: 19rem;
+  overflow: hidden;
   display: flex; flex-direction: column; justify-content: flex-end;
-  background-image:
-    linear-gradient(to top,
-      var(--stage) 0%,
-      color-mix(in oklab, var(--stage) 92%, transparent) 30%,
-      color-mix(in oklab, var(--stage) 58%, transparent) 50%,
-      color-mix(in oklab, var(--stage) 22%, transparent) 72%,
-      color-mix(in oklab, var(--stage) 10%, transparent) 100%),
-    url("../img/blue-note-stage.jpg?v=64");
-  background-size: cover;
-  background-position: 25% 50%;
 }
-.next > * { max-width: 44ch; position: relative;
-  text-shadow: 0 1px 3px var(--stage-deep), 0 2px 16px color-mix(in oklab, var(--stage-deep) 92%, transparent); }
+/* the photographs cycle underneath; two layers crossfade so only one extra
+   image is ever in flight. The scrim is a separate layer on top of them. */
+.next-bg { position: absolute; inset: 0; z-index: 0; background: var(--stage-deep); }
+.next-bg i {
+  position: absolute; inset: 0; opacity: 0;
+  background-size: cover; background-position: 50% 50%;
+  transition: opacity 1.4s ease;
+}
+.next-bg i.on { opacity: 1; }
+.next::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background-image: linear-gradient(97deg,
+    color-mix(in oklab, var(--stage) 93%, transparent) 0%,
+    color-mix(in oklab, var(--stage) 76%, transparent) 32%,
+    color-mix(in oklab, var(--stage) 52%, transparent) 62%,
+    color-mix(in oklab, var(--stage) 22%, transparent) 86%,
+    color-mix(in oklab, var(--stage) 48%, transparent) 100%);
+}
+@media (prefers-reduced-motion: reduce) { .next-bg i { transition: none; } }
+.next > * { max-width: 44ch; position: relative; text-shadow: 0 1px 14px color-mix(in oklab, var(--stage-deep) 85%, transparent); }
 .next-label { font-family: var(--display); font-size: 0.85rem; font-weight: 600; color: var(--tone); margin-bottom: 0.9rem; }
 .next-date { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.7rem; }
 .next-date .d { font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 9vw, 5.5rem); line-height: 0.9; letter-spacing: -0.04em; }
@@ -526,7 +533,9 @@ footer .credit { margin-bottom: 0.8rem; }
 /* lift the row's own content above the weather — but not the canvas itself,
    which must stay absolutely positioned or the grid will place it in a cell */
 .entry.wants-snow > *:not(.snow) { position: relative; z-index: 2; }
-.next > *:not(.snow) { z-index: 2; }
+/* inside the next-up card the stack is: photographs, scrim, snow, words */
+.next > .snow { z-index: 2; }
+.next > *:not(.snow):not(.next-bg) { z-index: 3; }
 
 /* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
    Everything here overrides rules defined above it. Add new base rules
@@ -534,16 +543,14 @@ footer .credit { margin-bottom: 0.8rem; }
 @media (max-width: 900px) {
   /* the scrim has to follow the layout: on a narrow card the text spans the
      whole photo, so darken from the bottom rather than from the left */
-  .next {
-    min-height: 23rem;
-    background-position: 32% 50%;
-    background-image:
-      linear-gradient(to top,
-        var(--stage) 0%,
-        color-mix(in oklab, var(--stage) 95%, transparent) 46%,
-        color-mix(in oklab, var(--stage) 62%, transparent) 72%,
-        color-mix(in oklab, var(--stage) 24%, transparent) 100%),
-      url("../img/blue-note-stage.jpg?v=64");
+  .next { min-height: 23rem; }
+  .next-bg i { background-position: 32% 50%; }
+  .next::after {
+    background-image: linear-gradient(to top,
+      var(--stage) 0%,
+      color-mix(in oklab, var(--stage) 95%, transparent) 46%,
+      color-mix(in oklab, var(--stage) 62%, transparent) 72%,
+      color-mix(in oklab, var(--stage) 24%, transparent) 100%);
   }
   .next > * { max-width: none; }
 

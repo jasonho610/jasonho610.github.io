@@ -267,7 +267,7 @@ footer .credit { margin-bottom: 0.8rem; }
       color-mix(in oklab, var(--stage) 55%, transparent) 100%),
     url("../img/blue-note-stage.jpg");
   background-size: cover;
-  background-position: 56% 26%;
+  background-position: 56% 50%;
 }
 .next > * { max-width: 44ch; position: relative; text-shadow: 0 1px 14px color-mix(in oklab, var(--stage-deep) 85%, transparent); }
 .next-label { font-family: var(--display); font-size: 0.85rem; font-weight: 600; color: var(--tone); margin-bottom: 0.9rem; }
@@ -521,6 +521,7 @@ footer .credit { margin-bottom: 0.8rem; }
 .snow.is-on { opacity: 1; }
 /* the row's own content stays above the weather */
 .entry.wants-snow > * { position: relative; z-index: 2; }
+.next > * { z-index: 2; }
 
 /* ─── responsive overrides — KEEP THIS BLOCK LAST ─────────────────
    Everything here overrides rules defined above it. Add new base rules
@@ -530,7 +531,7 @@ footer .credit { margin-bottom: 0.8rem; }
      whole photo, so darken from the bottom rather than from the left */
   .next {
     min-height: 23rem;
-    background-position: 62% 18%;
+    background-position: 60% 44%;
     background-image:
       linear-gradient(to top,
         var(--stage) 0%,

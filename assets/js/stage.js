@@ -299,6 +299,8 @@
 
   function describe() {
     markTrack();
+    document.documentElement.classList.toggle(
+      'xmas-playing', playing && /christmas/i.test(TRACKS[track].title));
     if (!nowPlaying) return;
     var t = TRACKS[track];
     nowPlaying.innerHTML = '';
@@ -354,6 +356,7 @@
     button.setAttribute('aria-pressed', 'false');
     button.setAttribute('aria-label', 'Play music');
     label.textContent = 'Play music';
+    document.documentElement.classList.remove('xmas-playing');
     save();
   }
   button.addEventListener('click', function () { playing ? pause() : play(); });
@@ -912,6 +915,8 @@
   'use strict';
 
   var hosts = Array.prototype.slice.call(document.querySelectorAll('.wants-snow'));
+  var card = document.querySelector('.next');
+  if (card && hosts.indexOf(card) < 0) hosts.push(card);   /* only while the track plays */
   if (!hosts.length) return;
 
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -924,6 +929,7 @@
     cv.setAttribute('aria-hidden', 'true');
     host.appendChild(cv);
     var ctx = cv.getContext('2d');
+    cv.className = 'snow';
     if (ctx) layers.push({ host: host, cv: cv, ctx: ctx, w: 0, h: 0, flakes: [] });
   });
   if (!layers.length) return;
@@ -941,11 +947,11 @@
         L.flakes.push({
           x: Math.random() * L.w,
           y: Math.random() * L.h,
-          r: 0.7 + Math.random() * 1.9,
+          r: 1.1 + Math.random() * 2.4,
           fall: 8 + Math.random() * 22,
           drift: (Math.random() - 0.5) * 14,
           phase: Math.random() * Math.PI * 2,
-          a: 0.25 + Math.random() * 0.5
+          a: 0.3 + Math.random() * 0.5
         });
       }
     });
@@ -957,9 +963,13 @@
   function frame(now) {
     var dt = Math.min(0.05, (now - last) / 1000 || 0);
     last = now;
+    var xmas = document.documentElement.classList.contains('xmas-playing');
     layers.forEach(function (L) {
       if (!L.w) return;
+      var live = L.host.classList.contains('wants-snow') || xmas;
+      L.cv.classList.toggle('is-on', live);
       L.ctx.clearRect(0, 0, L.w, L.h);
+      if (!live) return;
       L.ctx.fillStyle = '#F4EADB';
       for (var i = 0; i < L.flakes.length; i++) {
         var f = L.flakes[i];

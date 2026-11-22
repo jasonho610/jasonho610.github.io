@@ -101,8 +101,10 @@ version — or worse, new HTML with old CSS, which renders half-styled and looks
 does not help; Chrome's HTTP cache is shared across tabs. Adding any query string (`?x=1`) is a
 different URL and fetches fresh, which is the quickest way to check what the server really has.
 
-The stylesheet and scripts are therefore linked with a version query: `site.css?v=60`. **Bump that
-number in every HTML file whenever you change CSS or JS.**
+The stylesheet and scripts are therefore linked with a version query: `site.css?v=61`. **Bump that
+number in every HTML file whenever you change CSS or JS.** Images referenced from the stylesheet
+need their own query too — `url("../img/x.jpg?v=60")` — or a changed picture keeps showing the
+old one even after the CSS updates.
 
 One rule about `site.css`: the `@media (max-width: 900px)` block at the very end overrides rules
 defined above it. Put mobile overrides there, and add new base rules **above** that block — anything

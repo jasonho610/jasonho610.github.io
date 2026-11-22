@@ -265,7 +265,7 @@ footer .credit { margin-bottom: 0.8rem; }
       color-mix(in oklab, var(--stage) 52%, transparent) 62%,
       color-mix(in oklab, var(--stage) 22%, transparent) 86%,
       color-mix(in oklab, var(--stage) 48%, transparent) 100%),
-    url("../img/blue-note-stage.jpg");
+    url("../img/blue-note-stage.jpg?v=60");
   background-size: cover;
   background-position: 50% 50%;
 }
@@ -540,7 +540,7 @@ footer .credit { margin-bottom: 0.8rem; }
         color-mix(in oklab, var(--stage) 95%, transparent) 46%,
         color-mix(in oklab, var(--stage) 62%, transparent) 72%,
         color-mix(in oklab, var(--stage) 24%, transparent) 100%),
-      url("../img/blue-note-stage.jpg");
+      url("../img/blue-note-stage.jpg?v=60");
   }
   .next > * { max-width: none; }
 

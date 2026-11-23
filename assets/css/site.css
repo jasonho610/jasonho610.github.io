@@ -94,6 +94,15 @@ p:last-child { margin-bottom: 0; }
 section { padding-block: clamp(2.6rem, 5vw, 4.2rem); }
 section + section { border-top: 1px solid var(--line); }
 section:last-of-type { padding-bottom: clamp(2rem, 4vw, 3rem); }
+/* .experience, .onstage and .picks each carry a top margin from when they
+   shared one section. Opening a section, the padding already does that work
+   and the two stack into a gap twice the size it should be. */
+section > .experience:first-child,
+section > .onstage:first-child,
+section > .picks:first-child { margin-top: 0; }
+/* the listening list belongs with the gig card rather than opening a chapter
+   of its own, so no rule between them and the old gap is kept */
+#music { border-top: 0; padding-top: clamp(1.8rem, 3.5vw, 2.6rem); }
 
 .section-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.7rem; flex-wrap: wrap; }
 .section-head h2 { font-size: clamp(1.9rem, 4.2vw, 3.1rem); }

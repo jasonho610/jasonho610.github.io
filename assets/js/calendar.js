@@ -165,11 +165,11 @@
      most of these are 4:3 or taller, so centring them cuts the players' heads
      off; the second number is how far down the photograph the band sits. */
   var STAGE_SHOTS = [
-    { src: 'assets/img/blue-note-stage.jpg?v=74', pos: '50% 50%' },
-    { src: 'assets/img/stage-1.jpg?v=74',         pos: '50% 16%' },
-    { src: 'assets/img/stage-2.jpg?v=74',         pos: '50% 14%' },
-    { src: 'assets/img/stage-3.jpg?v=74',         pos: '50% 42%' },
-    { src: 'assets/img/stage-4.jpg?v=74',         pos: '50% 50%' }
+    { src: 'assets/img/blue-note-stage.jpg?v=75', pos: '50% 50%' },
+    { src: 'assets/img/stage-1.jpg?v=75',         pos: '50% 16%' },
+    { src: 'assets/img/stage-2.jpg?v=75',         pos: '50% 14%' },
+    { src: 'assets/img/stage-3.jpg?v=75',         pos: '50% 42%' },
+    { src: 'assets/img/stage-4.jpg?v=75',         pos: '50% 50%' }
   ];
   var SHOT_HOLD = 10000;   /* ms each photograph stays */
 

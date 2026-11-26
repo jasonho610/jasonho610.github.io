@@ -56,7 +56,7 @@ window.EVENTS = [
     venue: 'Blue Note Taipei',
     venueUrl: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-liu-te-yan-wu-ye-xun-si-zhong-zou-2026-11-28-21-30',
     poster: 'https://static.wixstatic.com/media/973c52_8ba0e9fa00e74e01912130c9b5955cb3~mv2.jpg/v1/fill/w_900,h_900,al_c/973c52_8ba0e9fa00e74e01912130c9b5955cb3~mv2.jpg',
-    note: 'Sitting in as guest with the Saturday residency. Kaoru Uno is away, so Michelle Mao 毛敏瑄 takes the piano chair. 21:30 to 23:30 — arrive before 21:30 or the reservation is released.',
+    note: 'Feature guest, with Michelle Mao 毛敏瑄 on piano. The Blue Note’s Saturday night series — cool jazz from the quartet Kaoru Uno has led since the Japanese pianist settled in Taipei decades ago. 21:30 to 23:30.',
     links: [{ label: 'Blue Note Taipei', url: 'https://www.bluenotetaipei.com/events/tai-bei-lan-diao-zhou-liu-te-yan-wu-ye-xun-si-zhong-zou-2026-11-28-21-30' }]
   },
   {

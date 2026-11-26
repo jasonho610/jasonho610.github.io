@@ -1,1 +1,4 @@
 .DS_Store
+
+# never deploy these — they go out by email, on request
+assets/cv/
